@@ -9,7 +9,12 @@ urlpatterns = patterns('',
 
     # Call Tree Pages
     url(r'^calltree/$', 'resident_advisor.views.call_tree_home', name='call_tree_home'),
-    url(r'^calltree/profile/me$', 'resident_advisor.views.call_tree_proflie', name='call_tree_proflie'),
+    url(r'^calltree/profile/me/$', 'resident_advisor.views.call_tree_proflie', name='call_tree_proflie'),
+
+    # Call Tree Twilio Pages
+    url(r'^twilio/calltree/recieve/$', 'resident_advisor.apps.call_tree.views.call_recieve', name='call_tree_recieve_call'),
+    url(r'^twilio/calltree/send/$', 'resident_advisor.apps.call_tree.views.outgoing_call', name='call_tree_outgoing_call'),
+    url(r'^twilio/calltree/connect/$', 'resident_advisor.apps.call_tree.views.conference_connect', name='call_tree_conference_connect'),
 
     url(r'^admin/', include(admin.site.urls)),
 )
