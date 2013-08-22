@@ -8,6 +8,7 @@ urlpatterns = patterns('',
 
     # Call Tree Pages
     url(r'^calltree/$', 'resident_advisor.views.call_tree_home', name='call_tree_home'),
+    url(r'^calltree/profile/me$', 'resident_advisor.views.call_tree_proflie', name='call_tree_proflie'),
 
     url(r'^admin/', include(admin.site.urls)),
 )
