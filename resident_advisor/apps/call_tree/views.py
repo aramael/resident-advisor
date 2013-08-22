@@ -14,7 +14,7 @@ def call_recieve(request):
     caller_number = request.POST.get('From', None)
 
     try:
-        caller = RACallProfile.objects.get(phone_number=caller_number)
+        caller = RACallProfile.objects.get(formatted_phone_number=caller_number)
     except RACallProfile.DoesNotExist:
         r.reject()
         return r
@@ -28,7 +28,7 @@ def call_recieve(request):
 
     client = TwilioRestClient(settings.TWILIO_ACCOUNT, settings.TWILIO_TOKEN)
 
-    calls = RACallProfile.objects.all().exclude(phone_number=caller_number)
+    calls = RACallProfile.objects.all().exclude(formatted_phone_number=caller_number)
 
     for call in calls:
         call_tree_outbound_call(client, request.POST['To'], call.phone_number)
