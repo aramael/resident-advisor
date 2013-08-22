@@ -78,6 +78,16 @@ SITE_ROOT = os.path.dirname(SETTINGS_DIR)
 # Python dotted path to the URLCONF used by Django.
 ROOT_URLCONF = 'resident_advisor.urls'
 
+# The URL where requests are redirected after login when the contrib.auth.login view gets no next parameter.
+# This is used by the login_required() decorator, for example.
+LOGIN_REDIRECT_URL = 'home'
+
+# The URL where requests are redirected for login, especially when using the login_required() decorator.
+LOGIN_URL = 'auth_login'
+
+# LOGIN_URL counterpart.
+LOGOUT_URL = 'auth_logout'
+
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
 MEDIA_ROOT = ''
