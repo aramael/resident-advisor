@@ -56,6 +56,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'south',
     'gunicorn',
+    'widget_tweaks',
+    'resident_advisor.libs.forms',
 )
 
 #==============================================================================
