@@ -1,0 +1,79 @@
+
+@media (min-width: 1200px) {
+    body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+    }
+}
+
+
+.dropdown-menu form input {
+    margin-bottom: 15px;
+}
+
+.dropdown-menu label {
+    text-shadow: none;
+    color: #555555;
+}
+
+.dropdown-menu form input[type=checkbox] {
+    float: left;
+    margin-right: 10px;
+}
+
+.dropdown-menu.sign-in {
+    padding: 15px 15px 0;
+}
+
+.dropdown-menu .btn {
+    margin-bottom: 20px;
+}
+
+.help-inline ul,
+.help-inline li {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+.help-inline li:after {
+    content: ", ";
+}
+.help-inline li.last:after {
+    content: ". ";
+}
+
+.bulk-actions {
+    padding: 10px 20px 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.selected-count {
+    font-weight: bold;
+}
+
+.inline-editable {
+    position: relative;
+}
+
+.inline-editable form {
+    display: none !important;
+}
+
+.inline-editable:hover:after {
+    content: "Click to Edit";
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline;
+    padding: .25em .6em;
+    font-size: 75%;
+    font-weight: 500;
+    line-height: 1;
+    color: #ffffff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #033c73;
+    border-radius: .25em;
+}
