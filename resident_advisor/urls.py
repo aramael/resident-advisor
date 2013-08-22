@@ -5,7 +5,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', 'resident_advisor.views.home', name='home'),
+    url(r'^/$', 'resident_advisor.views.call_tree_proflie', name='home'),
 
     # Call Tree Pages
     url(r'^calltree/$', 'resident_advisor.views.call_tree_home', name='call_tree_home'),
