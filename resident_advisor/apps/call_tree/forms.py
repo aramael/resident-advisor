@@ -14,6 +14,27 @@ class RACallProfileForm(ActionMethodForm, HideOwnerForm, forms.ModelForm):
         model = RACallProfile
         exclude = ['formatted_phone_number', ]
 
+    def __init__(self, *args, **kwargs):
+
+        super(RACallProfileForm, self).__init__(*args, **kwargs)
+
+        self.initial.update({
+            'first_name': self.instance.user.first_name,
+            'last_name': self.instance.user.last_name,
+        })
+
     def location_redirect(self, action, instance):
         if action == '_save':
             return {"to": 'call_tree_proflie'}
+
+    def save(self, *args, **kwargs):
+
+        print "AWESOME SAUCES"
+
+        if self.instance is not None:
+
+            self.instance.user.first_name = self.cleaned_data['first_name']
+            self.instance.user.last_name = self.cleaned_data['last_name']
+            self.instance.user.save(*args, **kwargs)
+
+        return super(RACallProfileForm, self).save(*args, **kwargs)
