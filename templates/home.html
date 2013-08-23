@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% load simple_forms %}
+
+{% block content %}
+
+    <div class="jumbotron">
+
+        <h1>Welcome Back, {{ user.first_name }}</h1>
+
+        <p>This is currently a handy tool to allow us to quickly and effortlessly contact other members of our staff in case of emergency where university policy does not allow us to use written communication.<strong>Try it out by calling (999) 999-9999</strong>. Please keep you phone number and information updated. </p>
+
+        <a href="{% url "call_tree_proflie" %}" class="btn btn-large btn-primary">Update Contact Information</a>
+    </div>
+
+
+
+{% endblock %}

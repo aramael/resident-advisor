@@ -14,7 +14,7 @@ def home(request):
 
     context = {}
 
-    return render(request, '', context)
+    return render(request, 'home.html', context)
 
 @login_required
 def call_tree_home(request):
