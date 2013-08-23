@@ -51,4 +51,9 @@ class HideOwnerForm(object):
     def __init__(self, *args, **kwargs):
         super(HideOwnerForm, self).__init__(*args, **kwargs)
 
-        self.fields['owner'].widget = forms.HiddenInput()
+        if 'owner' in self.fields:
+            owner_field = 'owner'
+        elif 'user' in self.fields:
+            owner_field = 'user'
+
+        self.fields[owner_field].widget = forms.HiddenInput()
