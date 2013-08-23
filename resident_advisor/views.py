@@ -3,11 +3,12 @@ Django views for resident_advisor project.
 
 """
 
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from resident_advisor.apps.call_tree.models import RACallProfile
 from resident_advisor.apps.call_tree.forms import RACallProfileForm
 
-
+@login_required
 def home(request):
     """    Display the Landing Page    """
 
@@ -15,7 +16,7 @@ def home(request):
 
     return render(request, '', context)
 
-
+@login_required
 def call_tree_home(request):
     """    Display the Landing Page    """
 
@@ -28,6 +29,7 @@ def call_tree_home(request):
     return render(request, 'call_tree_home.html', context)
 
 
+@login_required
 def call_tree_proflie(request):
     """    Display the Landing Page    """
 
