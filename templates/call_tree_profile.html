@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% load simple_forms %}
+
+{% block content %}
+
+    <h1>Edit Your Call Tree Info</h1>
+
+    {% if form.non_field_errors %}
+        <div class="alert alert-error">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+
+    <form method="post" class="form-horizontal"{% if has_file_field %} enctype="multipart/form-data"{% endif %}>
+        {% csrf_token %}
+
+        {% for field in form.visible_fields %}
+            {% bootstrap_field field %}
+        {% endfor %}
+
+        {% for field in form.hidden_fields %}
+            {{ field }}
+        {% endfor %}
+
+        <div class="row-fluid">
+            <div class="col-10 col-offset-2 hidden-phone">
+                <input type="submit" class="btn btn-primary" value="Update Information" class="default" name="_save">
+            </div>
+        </div>
+
+        <div class="form-actions hidden-tablet hidden-desktop">
+            <input type="submit" class="btn btn-primary btn-block btn-large" value="Update Information" class="default" name="_save">
+        </div>
+    </form>
+
+{% endblock %}

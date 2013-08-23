@@ -1,0 +1,21 @@
+{% load widget_tweaks %}
+
+<div class="form-group {% if field.errors %}has-error{% endif %}">
+    {% if field.is_checkbox %}
+        <label class="col-lg-2 control-label" for="id_{{ field.html_name }}">{{ field.label }}</label>
+        <div class="col-lg-10">
+            {% render_field field class+="form-control" %}
+            {% if field.errors %}
+            <span class="help-block">{{ field.errors }}</span>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="col-lg-offset-2 col-lg-10">
+            <div class="checkbox">
+                <label for="id_{{ field.html_name }}">
+                    {{ field }} {{ field.label }}
+                </label>
+            </div>
+        </div>
+    {% endif %}
+</div>
