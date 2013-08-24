@@ -1,5 +1,5 @@
 from django import forms
-from resident_advisor.libs.forms import ActionMethodForm, HideOwnerForm
+from resident_advisor.libs.forms import ActionMethodForm, HideOwnerForm, FieldsetsForm
 from .models import RACallProfile, RACallTree
 
 
@@ -37,7 +37,19 @@ class RACallProfileForm(ActionMethodForm, HideOwnerForm, forms.ModelForm):
         return super(RACallProfileForm, self).save(*args, **kwargs)
 
 
-class RACallTreeForm(ActionMethodForm, forms.ModelForm):
+class RACallTreeForm(ActionMethodForm, forms.ModelForm, FieldsetsForm):
+
+    fieldsets = (
+        (None, {
+            'fields': ('nice_name',)
+        }),
+        ("Phones", {
+            'fields': ('call_number', 'phone_numbers',)
+        }),
+        ("Permissions", {
+            'fields': ('owners',)
+        }),
+    )
 
     POSSIBLE_ACTIONS = {'_save', '_addanother', '_continue'}
 
