@@ -7,8 +7,12 @@
         {% csrf_token %}
         <div class="row-fluid">
             <div class="span12">
-                <h1>Edit Users</h1>
-
+                <h1>Select Users to Change</h1>
+                <div class="bulk-actions">
+                    <div class="pull-right">
+                        <a class="btn btn-primary" href="{% url "users_new" %}">Add User</a>
+                    </div>
+                </div>
                 <table class="table table-striped">
                     <thead>
                         <tr>

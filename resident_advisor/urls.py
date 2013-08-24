@@ -9,6 +9,7 @@ urlpatterns = patterns('',
 
     # User Pages
     url(r'^users/$', 'resident_advisor.views.users_home', name='users_home'),
+    url(r'^users/new$', 'resident_advisor.views.users_new', name='users_new'),
 
     # Call Tree Pages
     url(r'^calltree/$', 'resident_advisor.views.call_tree_home', name='call_tree_home'),
