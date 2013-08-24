@@ -1,11 +1,8 @@
 from django import forms
-from resident_advisor.libs.forms import ActionMethodForm, HideOwnerForm
+from resident_advisor.libs.forms import ActionMethodForm, HideOwnerForm, FieldsetsForm
 from .models import RACallProfile, RACallTree
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm
-from django.utils.datastructures import SortedDict
-from django.forms.forms import BoundField
-
 
 class RACallProfileForm(ActionMethodForm, HideOwnerForm, forms.ModelForm):
     first_name = forms.CharField()
@@ -138,7 +135,7 @@ class UserCreationForm(ActionMethodForm, forms.ModelForm):
             return {"to": 'users_edit', 'user_id': instance.pk}
 
 
-class UserEditForm(ActionMethodForm, UserChangeForm):
+class UserEditForm(ActionMethodForm, UserChangeForm, FieldsetsForm):
 
     fieldsets = (
         (None, {
@@ -151,37 +148,6 @@ class UserEditForm(ActionMethodForm, UserChangeForm):
             'fields': ('groups', 'user_permissions', 'is_superuser')
         }),
     )
-
-    @property
-    def formatted_fieldset(self):
-
-        if not hasattr(self, '_formatted_fieldset'):
-
-            fieldsets = self.fieldsets
-
-            formatted_fieldsets = []
-
-            for fieldset in fieldsets:
-
-                formatted_fieldset = {
-                    'title': fieldset[0],
-                    'classes': fieldset[1].get('classes', None),
-                }
-
-                fields = SortedDict()
-
-                for field in fieldset[1].get('fields', []):
-                    field_cls = self.fields.get(field, None)
-
-                    fields[field] = BoundField(form=self, field=field_cls, name=field)
-
-                formatted_fieldset['fields'] = fields
-
-                formatted_fieldsets.append(formatted_fieldset)
-
-            self._formatted_fieldset = formatted_fieldsets
-
-        return self._formatted_fieldset
 
     def location_redirect(self, action, instance):
         if action == '_save':
