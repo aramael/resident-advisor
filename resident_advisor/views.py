@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from resident_advisor.apps.call_tree.models import RACallProfile
-from resident_advisor.apps.call_tree.forms import RACallProfileForm, UserCreationForm
+from resident_advisor.apps.call_tree.forms import RACallProfileForm, UserCreationForm, UserEditForm
 
 
 @login_required
@@ -85,3 +85,23 @@ def users_new(request):
     }
 
     return render(request, 'users_new.html', context)
+
+
+def users_edit(request, user_id=None, self_edit=False):
+
+    if self_edit:
+        user = request.user
+    else:
+        user = get_object_or_404(User, pk=user_id)
+
+    form = UserEditForm(instance=user, data=request.POST or None, files=request.FILES or None)
+
+    if form.is_valid():
+        location_redirect = form.save()
+        return redirect(**location_redirect)
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'users_edit.html', context)

@@ -2,6 +2,7 @@ from django import forms
 from resident_advisor.libs.forms import ActionMethodForm, HideOwnerForm
 from .models import RACallProfile
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserChangeForm
 
 
 class RACallProfileForm(ActionMethodForm, HideOwnerForm, forms.ModelForm):
@@ -106,6 +107,17 @@ class UserCreationForm(ActionMethodForm, forms.ModelForm):
         location_redirect = self.location_redirect(data['action'], user)
 
         return location_redirect
+
+    def location_redirect(self, action, instance):
+        if action == '_save':
+            return {"to": 'users_home'}
+        elif action == '_addanother':
+            return {"to": 'users_new'}
+        elif action == '_continue':
+            return {"to": 'users_edit', 'user_id': instance.pk}
+
+
+class UserEditForm(ActionMethodForm, UserChangeForm):
 
     def location_redirect(self, action, instance):
         if action == '_save':
