@@ -25,6 +25,9 @@ def call_tree_home(request):
 
     filter_kwargs = {}
 
+    if not request.user.is_superuser:
+        filter_kwargs['owners__in'] = [request.user, ]
+
     phone_trees = RACallTree.objects.filter(**filter_kwargs)
 
     if phone_trees.count() == 1:
