@@ -16,6 +16,7 @@ class RACallProfile(models.Model):
 
 
 class RACallTree(models.Model):
+    owners = models.ManyToManyField(User, null=True, blank=False)
     nice_name = models.CharField(max_length=50)
     phone_numbers = models.ManyToManyField(RACallProfile)
     call_number = models.CharField(max_length=25, blank=True, null=False)
