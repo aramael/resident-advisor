@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
+{% load static %}
 {% load simple_forms %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static "css/dual-listbox.css" %}">
+{% endblock %}
 
 {% block content %}
 
@@ -42,4 +47,8 @@
         </div>
     </form>
 
+{% endblock %}
+{% block extra_js %}
+    <script src="{% static "js/dual-listbox.js" %}"></script>
+    <script>$('#id_groups').bootstrapDualListbox();$('#id_user_permissions').bootstrapDualListbox();</script>
 {% endblock %}
