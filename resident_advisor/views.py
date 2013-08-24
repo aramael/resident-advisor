@@ -20,6 +20,25 @@ def home(request):
 
     return render(request, 'home.html', context)
 
+@login_required
+def call_tree_home(request):
+
+    filter_kwargs = {}
+
+    phone_trees = RACallTree.objects.filter(**filter_kwargs)
+
+    if phone_trees.count() == 1:
+        # The User Can Only View One Phone Tree
+        phone_tree = phone_trees[0]
+
+        # Redirect User to More Appropriate View Page
+        return redirect('call_tree_view', call_tree_id=phone_tree.pk)
+
+    context = {
+        'phone_trees': phone_trees,
+    }
+
+    return render(request, 'call_tree_home.html', context)
 
 @login_required
 def call_tree_view(request):
