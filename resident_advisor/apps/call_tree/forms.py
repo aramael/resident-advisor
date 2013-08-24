@@ -103,6 +103,9 @@ class UserCreationForm(ActionMethodForm, forms.ModelForm):
         user.email = self.cleaned_data["username"] + "@columbia.edu"
 
         user.set_password(self.cleaned_data["password1"])
+
+        RACallProfile.objects.create(user=user)
+
         if commit:
             user.save()
 
