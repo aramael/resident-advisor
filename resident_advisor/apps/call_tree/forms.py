@@ -121,8 +121,6 @@ class UserCreationForm(ActionMethodForm, forms.ModelForm):
 
 class UserEditForm(ActionMethodForm, UserChangeForm):
 
-    # exclude_fields = ['is_staff', 'date_joined', 'last_login']
-
     fieldsets = (
         (None, {
             'fields': ('username', 'password',)
@@ -131,7 +129,7 @@ class UserEditForm(ActionMethodForm, UserChangeForm):
             'fields': ('first_name', 'last_name', 'email',)
         }),
         ("Permissions", {
-            'fields': ('groups', 'user_permissions',)
+            'fields': ('groups', 'user_permissions', 'is_superuser')
         }),
     )
 
