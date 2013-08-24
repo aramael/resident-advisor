@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
+{% load static %}
 {% load simple_forms %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static "css/dual-listbox.css" %}">
+{% endblock %}
 
 {% block content %}
 
@@ -17,7 +22,7 @@
         {% csrf_token %}
 
         {% for field in form.visible_fields %}
-            {% bootstrap_field field %}
+            {% bootstrap_horizontal_field field %}
         {% endfor %}
 
         {% for field in form.hidden_fields %}
@@ -35,4 +40,8 @@
         </div>
     </form>
 
+{% endblock %}
+{% block extra_js %}
+    <script src="{% static "js/dual-listbox.js" %}"></script>
+    <script>$('#id_owners').bootstrapDualListbox();$('#id_phone_numbers').bootstrapDualListbox();</script>
 {% endblock %}
