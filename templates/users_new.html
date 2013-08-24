@@ -17,7 +17,7 @@
         {% csrf_token %}
 
         {% for field in form.visible_fields %}
-            {% bootstrap_field field %}
+            {% bootstrap_horizontal_field field %}
         {% endfor %}
 
         {% for field in form.hidden_fields %}
