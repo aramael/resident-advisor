@@ -14,8 +14,9 @@ urlpatterns = patterns('',
     url(r'^users/me/$', 'resident_advisor.views.users_edit', {'self_edit': True}, name='account_edit'),
 
     # Call Tree Pages
-    url(r'^calltree/$', 'resident_advisor.views.call_tree_home', name='call_tree_home'),
-    url(r'^calltree/profile/me/$', 'resident_advisor.views.call_tree_proflie', name='call_tree_proflie'),
+    url(r'^phonetrees/$', 'resident_advisor.views.call_tree_home', name='call_tree_home'),
+    url(r'^phonetrees/(?P<call_tree_id>[0-9]+)/$', 'resident_advisor.views.call_tree_view', name='call_tree_view'),
+    url(r'^phonetrees/profile/me/$', 'resident_advisor.views.call_tree_proflie', name='call_tree_proflie'),
 
     # Call Tree Twilio Pages
     url(r'^twilio/calltree/recieve/$', 'resident_advisor.apps.call_tree.views.call_recieve', name='call_tree_recieve_call'),

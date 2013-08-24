@@ -7,7 +7,7 @@ from .helpers import has_model_permissions
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
-from resident_advisor.apps.call_tree.models import RACallProfile
+from resident_advisor.apps.call_tree.models import RACallProfile, RACallTree
 from resident_advisor.apps.call_tree.forms import RACallProfileForm, UserCreationForm, UserEditForm
 from resident_advisor.libs.users.managers import UserManager
 
@@ -20,8 +20,9 @@ def home(request):
 
     return render(request, 'home.html', context)
 
+
 @login_required
-def call_tree_home(request):
+def call_tree_view(request):
     """    Display the Landing Page    """
 
     profiles = RACallProfile.objects.all()
@@ -30,10 +31,10 @@ def call_tree_home(request):
         "profiles": profiles,
     }
 
-    if has_model_permissions(request.user, RACallProfile, 'edit', 'call_tree'):
-        template = 'call_tree_home.html'
+    if has_model_permissions(request.user, RACallTree, 'change', 'call_tree'):
+        template = 'call_tree_view_admin.html'
     else:
-        template = 'call_tree_home_admin.html'
+        template = 'call_tree_view.html'
 
     return render(request, template, context)
 
