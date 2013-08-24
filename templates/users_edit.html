@@ -16,8 +16,11 @@
     <form method="post" class="form-horizontal"{% if has_file_field %} enctype="multipart/form-data"{% endif %}>
         {% csrf_token %}
 
-        {% for field in form.visible_fields %}
-            {% bootstrap_horizontal_field field %}
+        {% for fieldset in form.formatted_fieldset %}
+            {% if fieldset.title %}<h2>{{ fieldset.title }}</h2>{% endif %}
+            {% for field in fieldset.fields.values %}
+                {% bootstrap_horizontal_field field %}
+            {% endfor %}
         {% endfor %}
 
         {% for field in form.hidden_fields %}
