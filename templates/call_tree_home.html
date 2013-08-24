@@ -50,7 +50,7 @@
                             </tr>
                         {% empty %}
                             <tr>
-                                <td colspan="4" style="text-align: center">No one was found in this call tree.</td>
+                                <td colspan="4" style="text-align: center">No call trees found, <a href="{% url "call_tree_new" %}">create a new call tree</a></td>
                             </tr>
                         {% endfor %}
                     </tbody>
