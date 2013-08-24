@@ -8,8 +8,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from resident_advisor.apps.call_tree.models import RACallProfile, RACallTree
-from resident_advisor.apps.call_tree.forms import RACallProfileForm, UserCreationForm, UserEditForm, RACallTreeForm
+from resident_advisor.apps.call_tree.forms import RACallProfileForm, RACallTreeForm
 from resident_advisor.libs.users.managers import UserManager
+from resident_advisor.libs.users.forms import UserCreationForm, UserEditForm
 
 
 @login_required
