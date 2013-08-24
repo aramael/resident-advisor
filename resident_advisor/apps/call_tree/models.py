@@ -12,4 +12,10 @@ class RACallProfile(models.Model):
 
         self.formatted_phone_number = format_phone_number(self.phone_number)
 
-        super(RACallProfile,self).save(*args, **kwargs)
+        super(RACallProfile, self).save(*args, **kwargs)
+
+
+class RACallTree(models.Model):
+    nice_name = models.CharField(max_length=50)
+    phone_numbers = models.ManyToManyField(RACallProfile)
+    call_number = models.CharField(max_length=25, blank=True, null=False)
