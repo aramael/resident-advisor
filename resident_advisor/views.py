@@ -47,7 +47,11 @@ def call_tree_home(request):
 @login_required
 def call_tree_new(request):
 
-    form = RACallTreeForm(data=request.POST or None, files=request.FILES or None)
+    form = RACallTreeForm(initial={
+                            'owners': [request.user.pk,],
+                            'phone_numbers': [request.user.racallprofile.pk, ]},
+                          data=request.POST or None,
+                          files=request.FILES or None)
 
     if form.is_valid():
         location_redirect = form.save()
