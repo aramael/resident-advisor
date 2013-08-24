@@ -1,4 +1,6 @@
 from django import forms
+from django.utils.datastructures import SortedDict
+from django.forms.forms import BoundField
 
 
 class ActionMethodForm(object):
@@ -44,6 +46,40 @@ class ActionMethodForm(object):
     def location_redirect(self, action, instance):
 
         raise NotImplementedError
+
+
+class FieldsetsForm(object):
+
+    @property
+    def formatted_fieldset(self):
+
+        if not hasattr(self, '_formatted_fieldset'):
+
+            fieldsets = self.fieldsets
+
+            formatted_fieldsets = []
+
+            for fieldset in fieldsets:
+
+                formatted_fieldset = {
+                    'title': fieldset[0],
+                    'classes': fieldset[1].get('classes', None),
+                }
+
+                fields = SortedDict()
+
+                for field in fieldset[1].get('fields', []):
+                    field_cls = self.fields.get(field, None)
+
+                    fields[field] = BoundField(form=self, field=field_cls, name=field)
+
+                formatted_fieldset['fields'] = fields
+
+                formatted_fieldsets.append(formatted_fieldset)
+
+            self._formatted_fieldset = formatted_fieldsets
+
+        return self._formatted_fieldset
 
 
 class HideOwnerForm(object):

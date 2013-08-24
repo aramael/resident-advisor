@@ -7,7 +7,7 @@
         {% csrf_token %}
         <div class="row-fluid">
             <div class="span12">
-                <h1>Change Call Trees</h1>
+                <h1>Edit Call Tree</h1>
 
                 <div class="bulk-actions">
                     <div class="pull-left">
@@ -19,11 +19,11 @@
                                 {% endfor %}
                             </select>
                             <input type="submit" class="btn" value="Go" name="_bulkactions">
-                            <span class="action-counter" style="display: inline;"><span class="selected-count">0</span> of {{ trees|length }} selected</span>
+                            <span class="action-counter" style="display: inline;"><span class="selected-count">0</span> of {{ profiles|length }} selected</span>
                         </div>
                     </div>
                     <div class="pull-right">
-                        <a class="btn btn-primary" href="{% url "call_tree_new" %}">New Call Tree</a>
+                        <a class="btn btn-primary" href="{% url "users_new" %}">Add RA to Notify</a>
                     </div>
                 </div>
             </div>
@@ -36,21 +36,19 @@
                         <tr>
                             <th><input type="checkbox" id="action-toggle" style="display: inline-block;"></th>
                             <th>Name</th>
-                            <th>Call Number</th>
-                            <th>Owners</th>
+                            <th>Phone Number</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for tree in trees %}
+                        {% for profile in profiles %}
                             <tr>
-                                <td class="action-checkbox"><input class="action-select" name="_selected_action" type="checkbox" value="{{ tree.pk }}"></td>
-                                <td><a href="{% url "call_tree_view" tree.pk %}">{{ tree.nice_name }}</a></td>
-                                <td>{{ tree.call_number }}</td>
-                                <td>{{ tree.owners }}</td>
+                                <td class="action-checkbox"><input class="action-select" name="_selected_action" type="checkbox" value="{{ profile.pk }}"></td>
+                                <td>{{ profile.user.first_name }} {{ profile.user.last_name }}</td>
+                                <td>{{ profile.phone_number }}</td>
                             </tr>
                         {% empty %}
                             <tr>
-                                <td colspan="4" style="text-align: center">No call trees found, <a href="{% url "call_tree_new" %}">create a new call tree</a></td>
+                                <td colspan="2" style="text-align: center">No one was found in this call tree.</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -63,5 +61,5 @@
 
 {% block extra_js %}
     <script src="{% static "js/bulk-actions.js" %}"></script>
-    <script>var _max_bulk_item_count={{ trees|length }}; var _current_bulk_item_count=0</script>
+    <script>var _max_bulk_item_count={{ profiles|length }}; var _current_bulk_item_count=0</script>
 {% endblock %}

@@ -6,10 +6,17 @@ from django.contrib.auth.models import User
 class RACallProfile(models.Model):
     user = models.OneToOneField(User)
     phone_number = models.CharField(max_length=25)
-    formatted_phone_number = models.CharField(max_length=25, blank=True, null=False)
+    formatted_phone_number = models.CharField(max_length=25, blank=True, null=True)
 
     def save(self, *args, **kwargs):
 
         self.formatted_phone_number = format_phone_number(self.phone_number)
 
-        super(RACallProfile,self).save(*args, **kwargs)
+        super(RACallProfile, self).save(*args, **kwargs)
+
+
+class RACallTree(models.Model):
+    owners = models.ManyToManyField(User, null=True, blank=False)
+    nice_name = models.CharField(max_length=50)
+    phone_numbers = models.ManyToManyField(RACallProfile)
+    call_number = models.CharField(max_length=25, blank=True, null=False)
