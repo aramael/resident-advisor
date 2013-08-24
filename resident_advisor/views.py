@@ -4,9 +4,11 @@ Django views for resident_advisor project.
 """
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from resident_advisor.apps.call_tree.models import RACallProfile
 from resident_advisor.apps.call_tree.forms import RACallProfileForm
+
 
 @login_required
 def home(request):
@@ -47,3 +49,18 @@ def call_tree_proflie(request):
     }
 
     return render(request, 'call_tree_profile.html', context)
+
+#==============================================================================
+# Users Pages
+#==============================================================================
+
+
+def users_home(request):
+
+    users = User.objects.all()
+
+    context = {
+        'users': users,
+    }
+
+    return render(request, 'users_home.html', context)

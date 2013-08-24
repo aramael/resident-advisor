@@ -7,6 +7,9 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$', 'resident_advisor.views.home', name='home'),
 
+    # User Pages
+    url(r'^users/$', 'resident_advisor.views.users_home', name='users_home'),
+
     # Call Tree Pages
     url(r'^calltree/$', 'resident_advisor.views.call_tree_home', name='call_tree_home'),
     url(r'^calltree/profile/me/$', 'resident_advisor.views.call_tree_proflie', name='call_tree_proflie'),
