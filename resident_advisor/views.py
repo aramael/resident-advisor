@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from resident_advisor.apps.call_tree.models import RACallProfile
 from resident_advisor.apps.call_tree.forms import RACallProfileForm, UserCreationForm, UserEditForm
+from resident_advisor.libs.users.managers import UserManager
 
 
 @login_required
@@ -63,10 +64,23 @@ def call_tree_proflie(request):
 
 def users_home(request):
 
+    manager = UserManager()
+
+    if request.POST:
+        if '_bulkactions' in request.POST:
+
+            items = []
+            for item in request.POST.getlist('_selected_action'):
+                item = User.objects.get(pk=int(item))
+                items.append(item)
+
+            manager.process_bulk_actions(action=request.POST['action'], queryset=items)
+
     users = User.objects.all()
 
     context = {
         'users': users,
+        "actions": manager.bulk_actions ,
     }
 
     return render(request, 'users_home.html', context)
