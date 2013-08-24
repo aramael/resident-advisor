@@ -1,6 +1,6 @@
 from django import forms
 from resident_advisor.libs.forms import ActionMethodForm, HideOwnerForm
-from .models import RACallProfile
+from .models import RACallProfile, RACallTree
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm
 from django.utils.datastructures import SortedDict
@@ -39,6 +39,22 @@ class RACallProfileForm(ActionMethodForm, HideOwnerForm, forms.ModelForm):
             self.instance.user.save(*args, **kwargs)
 
         return super(RACallProfileForm, self).save(*args, **kwargs)
+
+
+class RACallTreeForm(ActionMethodForm, forms.ModelForm):
+
+    POSSIBLE_ACTIONS = {'_save', '_addanother', '_continue'}
+
+    class Meta:
+        model = RACallTree
+
+    def location_redirect(self, action, instance):
+        if action == '_save':
+            return {"to": 'call_tree_home'}
+        elif action == '_addanother':
+            return {"to": 'call_tree_new'}
+        elif action == '_continue':
+            return {"to": 'call_tree_view', 'call_tree_id': instance.pk}
 
 
 class UserCreationForm(ActionMethodForm, forms.ModelForm):

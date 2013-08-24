@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from resident_advisor.apps.call_tree.models import RACallProfile, RACallTree
-from resident_advisor.apps.call_tree.forms import RACallProfileForm, UserCreationForm, UserEditForm
+from resident_advisor.apps.call_tree.forms import RACallProfileForm, UserCreationForm, UserEditForm, RACallTreeForm
 from resident_advisor.libs.users.managers import UserManager
 
 
@@ -35,13 +35,28 @@ def call_tree_home(request):
         return redirect('call_tree_view', call_tree_id=phone_tree.pk)
 
     context = {
-        'phone_trees': phone_trees,
+        'trees': phone_trees,
     }
 
     return render(request, 'call_tree_home.html', context)
 
 @login_required
-def call_tree_view(request):
+def call_tree_new(request):
+
+    form = RACallTreeForm(data=request.POST or None, files=request.FILES or None)
+
+    if form.is_valid():
+        location_redirect = form.save()
+        return redirect(**location_redirect)
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'call_tree_new.html', context)
+
+@login_required
+def call_tree_view(request, call_tree_id=None):
     """    Display the Landing Page    """
 
     profiles = RACallProfile.objects.all()
