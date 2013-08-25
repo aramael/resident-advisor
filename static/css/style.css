@@ -1,11 +1,5 @@
 
-@media (min-width: 1200px) {
-    body {
-        padding-top: 60px;
-        padding-bottom: 40px;
-    }
-}
-
+body { padding-top: 70px; }
 
 .dropdown-menu form input {
     margin-bottom: 15px;
