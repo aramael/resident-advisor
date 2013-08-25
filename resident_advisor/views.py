@@ -128,7 +128,7 @@ def call_tree_profile(request, profile_id=None):
         profile = get_object_or_404(RACallProfile, user=request.user)
 
     if not has_model_permissions(request.user, 'change', profile):
-        return HttpResponseForbidden()
+        return HttpResponseForbidden('403 Forbidden')
 
     form = RACallProfileForm(instance=profile, data=request.POST or None, files=request.FILES or None)
 
