@@ -46,7 +46,7 @@
                                 <td class="action-checkbox"><input class="action-select" name="_selected_action" type="checkbox" value="{{ tree.pk }}"></td>
                                 <td><a href="{% url "call_tree_view" tree.pk %}">{{ tree.nice_name }}</a></td>
                                 <td>{{ tree.call_number }}</td>
-                                <td>{{ tree.owners }}</td>
+                                <td>{{ tree.display_owners }}</td>
                             </tr>
                         {% empty %}
                             <tr>

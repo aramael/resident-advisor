@@ -21,6 +21,20 @@ class RACallTree(models.Model):
     phone_numbers = models.ManyToManyField(RACallProfile)
     call_number = models.CharField(max_length=25, blank=True, null=False)
 
+    def display_owners(self):
+
+        owners = self.owners.all()
+
+        display_text = ''
+
+        for owner in owners:
+            if hasattr(owner, 'first_name'):
+                display_text += owner.first_name + ' ' + owner.last_name + ','
+            else:
+                display_text += owner.username + ','
+
+        return display_text[:-1]
+
     def has_change_permissions(self, entity):
 
         # Active superusers have all permissions.
