@@ -3,7 +3,7 @@ Django views for resident_advisor project.
 
 """
 
-from .helpers import has_model_permissions
+from .helpers import has_model_permissions, has_global_permissions
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
@@ -51,6 +51,9 @@ def call_tree_home(request):
 
 @login_required
 def call_tree_new(request):
+
+    if not has_global_permissions(request.user, RACallTree, 'add', 'call_tree'):
+        return HttpResponseForbidden('403 Forbidden')
 
     form = RACallTreeForm(initial={'owners': [request.user.pk, ], 'phone_numbers': [request.user.racallprofile.pk, ]},
                           data=request.POST or None,
