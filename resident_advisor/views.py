@@ -46,9 +46,7 @@ def call_tree_home(request):
 @login_required
 def call_tree_new(request):
 
-    form = RACallTreeForm(initial={
-                            'owners': [request.user.pk,],
-                            'phone_numbers': [request.user.racallprofile.pk, ]},
+    form = RACallTreeForm(initial={'owners': [request.user.pk, ], 'phone_numbers': [request.user.racallprofile.pk, ]},
                           data=request.POST or None,
                           files=request.FILES or None)
 
