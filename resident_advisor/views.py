@@ -3,7 +3,7 @@ Django views for resident_advisor project.
 
 """
 
-from .helpers import has_model_permissions
+from .helpers import has_model_permissions, has_global_permissions
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
@@ -42,10 +42,18 @@ def call_tree_home(request):
         'trees': phone_trees,
     }
 
-    return render(request, 'call_tree_home.html', context)
+    if has_model_permissions(request.user, 'change', phone_trees):
+        template = 'call_tree_home_admin.html'
+    else:
+        template = 'call_tree_home.html'
+
+    return render(request, template, context)
 
 @login_required
 def call_tree_new(request):
+
+    if not has_global_permissions(request.user, RACallTree, 'add', 'call_tree'):
+        return HttpResponseForbidden('403 Forbidden')
 
     form = RACallTreeForm(initial={'owners': [request.user.pk, ], 'phone_numbers': [request.user.racallprofile.pk, ]},
                           data=request.POST or None,
@@ -111,10 +119,16 @@ def call_tree_profile_new(request, call_tree_id=None):
 
 
 @login_required
-def call_tree_proflie(request):
+def call_tree_profile(request, profile_id=None):
     """    Display the Landing Page    """
 
-    profile = get_object_or_404(RACallProfile, user=request.user)
+    if profile_id is not None:
+        profile = get_object_or_404(RACallProfile, pk=profile_id)
+    else:
+        profile = get_object_or_404(RACallProfile, user=request.user)
+
+    if not has_model_permissions(request.user, 'change', profile):
+        return HttpResponseForbidden('403 Forbidden')
 
     form = RACallProfileForm(instance=profile, data=request.POST or None, files=request.FILES or None)
 
@@ -133,8 +147,11 @@ def call_tree_proflie(request):
 # Users Pages
 #==============================================================================
 
-
+@login_required
 def users_home(request):
+
+    if not has_global_permissions(request.user, UserManager, 'change', 'auth'):
+        return HttpResponseForbidden('403 Forbidden')
 
     manager = UserManager()
 
@@ -157,8 +174,11 @@ def users_home(request):
 
     return render(request, 'users_home.html', context)
 
-
+@login_required
 def users_new(request):
+
+    if not has_global_permissions(request.user, UserManager, 'add', 'auth'):
+        return HttpResponseForbidden('403 Forbidden')
 
     form = UserCreationForm(data=request.POST or None, files=request.FILES or None)
 
@@ -172,8 +192,11 @@ def users_new(request):
 
     return render(request, 'users_new.html', context)
 
-
+@login_required
 def users_edit(request, user_id=None, self_edit=False):
+
+    if not has_global_permissions(request.user, UserManager, 'change', 'auth'):
+        return HttpResponseForbidden('403 Forbidden')
 
     if self_edit:
         user = request.user

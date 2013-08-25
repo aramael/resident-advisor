@@ -1,13 +1,15 @@
+import collections
 
 
 def has_model_permissions(entity, perms, instance):
 
     if not isinstance(perms, list):
         perms = [perms, ]
-    if not isinstance(instance, list):
-        instances = [instance, ]
-    else:
+
+    if isinstance(instance, collections.Iterable):
         instances = instance
+    else:
+        instances = [instance, ]
 
     for perm in perms:
         for instance in instances:
@@ -18,3 +20,14 @@ def has_model_permissions(entity, perms, instance):
                     return True
 
     return False
+
+
+def has_global_permissions(entity, model, perms, app):
+
+    if not isinstance(perms, list):
+        perms = [perms, ]
+
+    for p in perms:
+        if not entity.has_perm("%s.%s_%s" % (app, p, model.__name__.lower())):
+            return False
+        return True

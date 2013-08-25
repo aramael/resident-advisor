@@ -24,7 +24,7 @@ class RACallProfileForm(ActionMethodForm, HideOwnerForm, forms.ModelForm):
 
     def location_redirect(self, action, instance):
         if action == '_save':
-            return {"to": 'call_tree_proflie'}
+            return {"to": 'call_tree_profile_self'}
 
     def save(self, *args, **kwargs):
 
