@@ -67,13 +67,15 @@ def call_tree_new(request):
 def call_tree_view(request, call_tree_id=None):
     """    Display the Landing Page    """
 
-    profiles = RACallProfile.objects.all()
+    phone_tree = get_object_or_404(RACallTree, pk=call_tree_id)
+
+    profiles = RACallProfile.objects.filter()
 
     context = {
         "profiles": profiles,
     }
 
-    if has_model_permissions(request.user, RACallTree, 'change', 'call_tree'):
+    if has_model_permissions(request.user, 'change', phone_tree):
         template = 'call_tree_view_admin.html'
     else:
         template = 'call_tree_view.html'
