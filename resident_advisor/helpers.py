@@ -4,10 +4,8 @@ def has_model_permissions(entity, perms, instance):
 
     if not isinstance(perms, list):
         perms = [perms, ]
-    if not isinstance(instance, list):
-        instances = [instance, ]
-    else:
-        instances = instance
+
+    instances = list(instance)
 
     for perm in perms:
         for instance in instances:
