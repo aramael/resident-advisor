@@ -11,6 +11,7 @@ from resident_advisor.apps.call_tree.models import RACallProfile, RACallTree
 from resident_advisor.apps.call_tree.forms import RACallProfileForm, RACallTreeForm
 from resident_advisor.libs.users.managers import UserManager
 from resident_advisor.libs.users.forms import UserCreationForm, UserEditForm
+from django.db.models import Q
 
 
 @login_required
@@ -24,12 +25,10 @@ def home(request):
 @login_required
 def call_tree_home(request):
 
-    filter_kwargs = {}
-
     if not request.user.is_superuser:
-        filter_kwargs['owners__in'] = [request.user, ]
-
-    phone_trees = RACallTree.objects.filter(**filter_kwargs)
+        phone_trees = RACallTree.objects.filter(Q(owners__in=[request.user, ]) | Q(phone_numbers__in=[request.user.racallprofile, ])).distinct()
+    else:
+        phone_trees = RACallTree.objects.all()
 
     if phone_trees.count() == 1:
         # The User Can Only View One Phone Tree
@@ -69,9 +68,10 @@ def call_tree_view(request, call_tree_id=None):
 
     phone_tree = get_object_or_404(RACallTree, pk=call_tree_id)
 
-    profiles = RACallProfile.objects.filter()
+    profiles = phone_tree.phone_numbers.all()
 
     context = {
+        "tree": phone_tree,
         "profiles": profiles,
     }
 
