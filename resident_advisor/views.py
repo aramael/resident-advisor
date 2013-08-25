@@ -150,6 +150,9 @@ def call_tree_profile(request, profile_id=None):
 @login_required
 def users_home(request):
 
+    if not has_global_permissions(request.user, UserManager, 'change', 'auth'):
+        return HttpResponseForbidden('403 Forbidden')
+
     manager = UserManager()
 
     if request.POST:
@@ -174,6 +177,9 @@ def users_home(request):
 @login_required
 def users_new(request):
 
+    if not has_global_permissions(request.user, UserManager, 'add', 'auth'):
+        return HttpResponseForbidden('403 Forbidden')
+
     form = UserCreationForm(data=request.POST or None, files=request.FILES or None)
 
     if form.is_valid():
@@ -188,6 +194,9 @@ def users_new(request):
 
 @login_required
 def users_edit(request, user_id=None, self_edit=False):
+
+    if not has_global_permissions(request.user, UserManager, 'change', 'auth'):
+        return HttpResponseForbidden('403 Forbidden')
 
     if self_edit:
         user = request.user
