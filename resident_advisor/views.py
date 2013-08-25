@@ -139,7 +139,7 @@ def call_tree_profile_self(request, profile_id=None):
 # Users Pages
 #==============================================================================
 
-
+@login_required
 def users_home(request):
 
     manager = UserManager()
@@ -163,7 +163,7 @@ def users_home(request):
 
     return render(request, 'users_home.html', context)
 
-
+@login_required
 def users_new(request):
 
     form = UserCreationForm(data=request.POST or None, files=request.FILES or None)
@@ -178,7 +178,7 @@ def users_new(request):
 
     return render(request, 'users_new.html', context)
 
-
+@login_required
 def users_edit(request, user_id=None, self_edit=False):
 
     if self_edit:
