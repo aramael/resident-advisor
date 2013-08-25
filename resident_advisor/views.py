@@ -83,7 +83,7 @@ def call_tree_view(request, call_tree_id=None):
 
 
 @login_required
-def call_tree_profile_self_new(request, call_tree_id=None):
+def call_tree_profile_new(request, call_tree_id=None):
     """    Display the Landing Page    """
 
     phone_tree = get_object_or_404(RACallTree, pk=call_tree_id)
@@ -111,7 +111,7 @@ def call_tree_profile_self_new(request, call_tree_id=None):
 
 
 @login_required
-def call_tree_profile_self(request, profile_id=None):
+def call_tree_profile(request, profile_id=None):
     """    Display the Landing Page    """
 
     if profile_id is not None:
@@ -133,7 +133,7 @@ def call_tree_profile_self(request, profile_id=None):
         "form": form,
     }
 
-    return render(request, 'call_tree_profile_self.html', context)
+    return render(request, 'call_tree_profile.html', context)
 
 #==============================================================================
 # Users Pages
