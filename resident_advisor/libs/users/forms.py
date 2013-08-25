@@ -107,3 +107,68 @@ class UserEditForm(ActionMethodForm, UserChangeForm, FieldsetsForm):
             return {"to": 'users_new'}
         elif action == '_continue':
             return {"to": 'users_edit', 'user_id': instance.pk}
+
+
+class ProfileCreationForm(ActionMethodForm, forms.ModelForm):
+    """
+    A form that creates a user, with no privileges, from the given username and
+    password.
+    """
+
+    POSSIBLE_ACTIONS = {'_save', '_addanother', '_continue'}
+
+    error_messages = {
+        'duplicate_username': "An RA with that UNI already exists.",
+    }
+    username = forms.RegexField(label="Columbia UNI", max_length=30,
+                                regex=r'^[\w.@+-]+$',
+                                help_text="Required. 30 characters or fewer. Letters, digits and "
+                                          "@/./+/-/_ only.",
+                                error_messages={
+                                    'invalid': "This value may contain only letters, numbers and "
+                                               "@/./+/-/_ characters."})
+
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+
+    class Meta:
+        model = User
+        fields = ('username', )
+
+    def clean_username(self):
+        # Since User.username is unique, this check is redundant,
+        # but it sets a nicer error message than the ORM. See #13147.
+        username = self.cleaned_data["username"]
+        try:
+            User._default_manager.get(username=username)
+        except User.DoesNotExist:
+            return username
+        raise forms.ValidationError(self.error_messages['duplicate_username'])
+
+    def save(self, call_tree, commit=True):
+
+        data = self.cleaned_data
+
+        user = User.objects.create_user(username=data['username'])
+
+        user.first_name = self.cleaned_data["first_name"]
+        user.last_name = self.cleaned_data["last_name"]
+        user.email = self.cleaned_data["username"] + "@columbia.edu"
+
+        if commit:
+            profile = RACallProfile.objects.create(user=user)
+            user.save()
+
+            call_tree.phone_numbers.add(profile)
+
+        location_redirect = self.location_redirect(data['action'], user)
+
+        return location_redirect
+
+    def location_redirect(self, action, instance):
+        if action == '_save':
+            return {"to": 'users_home'}
+        elif action == '_addanother':
+            return {"to": 'users_new'}
+        elif action == '_continue':
+            return {"to": 'users_edit', 'user_id': instance.pk}

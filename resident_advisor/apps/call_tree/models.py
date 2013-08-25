@@ -14,6 +14,12 @@ class RACallProfile(models.Model):
 
         super(RACallProfile, self).save(*args, **kwargs)
 
+    def __unicode__(self):
+        if hasattr(self.user, 'first_name'):
+            return self.user.first_name + ' ' + self.user.last_name
+        else:
+            return self.user.username
+
 
 class RACallTree(models.Model):
     owners = models.ManyToManyField(User, null=True, blank=False)

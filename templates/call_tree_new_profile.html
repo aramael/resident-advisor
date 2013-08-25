@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% load simple_forms %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static "css/dual-listbox.css" %}">
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header">
+        <h1>Add RA to Notify</h1>
+    </div>
+
+    <ul id="new-profile-tab" class="nav nav-tabs">
+        <li class=""><a href="#add-existing" data-toggle="tab">Add Exisiting RA</a></li>
+        <li class=""><a href="#new-profile" data-toggle="tab">Add New RA</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade active in" id="add-existing">
+            <h3>Add Exisiting RA's</h3>
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-error">
+                    <a class="close" data-dismiss="alert" href="#">×</a>
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <form method="post" class="form-horizontal"{% if add_existing_form.has_file_field %} enctype="multipart/form-data"{% endif %}>
+                {% csrf_token %}
+
+                {% for fieldset in add_existing_form.formatted_fieldset %}
+                    {% if fieldset.title %}<h2>{{ fieldset.title }}</h2>{% endif %}
+                    {% for field in fieldset.fields.values %}
+                        {% bootstrap_horizontal_field field %}
+                    {% endfor %}
+                {% endfor %}
+
+                {% for field in add_existing_form.hidden_fields %}
+                    {{ field }}
+                {% endfor %}
+
+                <div class="row-fluid">
+                    <div class="col-10 col-offset-2 hidden-phone">
+                        <input type="submit" class="btn btn-primary" value="Save Changes" class="default" name="_save">
+                    </div>
+                </div>
+
+                <div class="form-actions hidden-tablet hidden-desktop">
+                    <input type="submit" class="btn btn-primary btn-block btn-large" value="Save Changes" class="default" name="_save">
+                </div>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="new-profile">
+            <h3>New RA</h3>
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-error">
+                    <a class="close" data-dismiss="alert" href="#">×</a>
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <form method="post" class="form-horizontal"{% if new_profile_form.has_file_field %} enctype="multipart/form-data"{% endif %}>
+                {% csrf_token %}
+
+                {% for field in new_profile_form.visible_fields %}
+                    {% bootstrap_horizontal_field field %}
+                {% endfor %}
+
+                {% for field in new_profile_form.hidden_fields %}
+                    {{ field }}
+                {% endfor %}
+
+                <div class="row-fluid">
+                    <div class="col-10 col-offset-2 hidden-phone">
+                        <input type="submit" class="btn btn-primary" value="Add RA" class="default" name="_save">
+                        <input type="submit" class="btn btn-info" value="Add RA & Add Another" name="_addanother">
+                        <input type="submit" class="btn" value="Add RA & Continue Editing" name="_continue">
+                    </div>
+                </div>
+
+                <div class="form-actions hidden-tablet hidden-desktop">
+                    <input type="submit" class="btn btn-primary btn-block btn-large" value="Add RA" class="default" name="_save">
+                    <input type="submit" class="btn btn-info btn-block btn-large" value="Add RA & Add Another" name="_addanother">
+                    <input type="submit" class="btn btn-block btn-large" value="Add RA & Continue Editing" name="_continue">
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static "js/dual-listbox.js" %}"></script>
+    <script>
+        $(function () {
+            $('#new-profile-tab a').click(function (e) {
+                e.preventDefault()
+                $(this).tab('show')
+            });
+            $('#id_phone_numbers').bootstrapDualListbox();
+        })
+    </script>
+{% endblock %}

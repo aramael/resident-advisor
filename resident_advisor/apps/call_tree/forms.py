@@ -55,6 +55,7 @@ class RACallTreeForm(ActionMethodForm, forms.ModelForm, FieldsetsForm):
 
     class Meta:
         model = RACallTree
+        fields = ['nice_name', 'call_number', 'phone_numbers', 'owners']
 
     def location_redirect(self, action, instance):
         if action == '_save':
@@ -62,4 +63,23 @@ class RACallTreeForm(ActionMethodForm, forms.ModelForm, FieldsetsForm):
         elif action == '_addanother':
             return {"to": 'call_tree_new'}
         elif action == '_continue':
+            return {"to": 'call_tree_view', 'call_tree_id': instance.pk}
+
+
+class RACallTreeEditForm(ActionMethodForm, FieldsetsForm, forms.ModelForm):
+
+    fieldsets = (
+        (None, {
+            'fields': ('phone_numbers',)
+        }),
+    )
+
+    POSSIBLE_ACTIONS = {'_save'}
+
+    class Meta:
+        model = RACallTree
+        fields = ['phone_numbers',]
+
+    def location_redirect(self, action, instance):
+        if action == '_save':
             return {"to": 'call_tree_view', 'call_tree_id': instance.pk}
