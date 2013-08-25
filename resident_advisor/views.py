@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseForbidden
 from resident_advisor.apps.call_tree.models import RACallProfile, RACallTree
-from resident_advisor.apps.call_tree.forms import RACallProfileForm, RACallTreeForm
+from resident_advisor.apps.call_tree.forms import RACallProfileForm, RACallTreeForm, RACallTreeEditForm
 from resident_advisor.libs.users.managers import UserManager
 from resident_advisor.libs.users.forms import UserCreationForm, UserEditForm, ProfileCreationForm
 from django.db.models import Q
@@ -92,13 +92,19 @@ def call_tree_profile_new(request, call_tree_id=None):
         return HttpResponseForbidden()
 
     new_profile_form = ProfileCreationForm(data=request.POST or None, files=request.FILES or None)
+    add_existing_form = RACallTreeEditForm(instance=phone_tree, data=request.POST or None, files=request.FILES or None)
 
     if new_profile_form.is_valid():
         location_redirect = new_profile_form.save(phone_tree)
         return redirect(**location_redirect)
 
+    if add_existing_form.is_valid():
+        location_redirect = add_existing_form.save(phone_tree)
+        return redirect(**location_redirect)
+
     context = {
         'new_profile_form': new_profile_form,
+        'add_existing_form': add_existing_form,
     }
 
     return render(request, 'call_tree_new_profile.html', context)

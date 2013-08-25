@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
 {% load simple_forms %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static "css/dual-listbox.css" %}">
+{% endblock %}
 
 {% block content %}
 
@@ -14,10 +19,42 @@
     </ul>
     <div id="myTabContent" class="tab-content">
         <div class="tab-pane fade active in" id="add-existing">
-            <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+            <h3>Add Exisiting RA's</h3>
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-error">
+                    <a class="close" data-dismiss="alert" href="#">×</a>
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <form method="post" class="form-horizontal"{% if add_existing_form.has_file_field %} enctype="multipart/form-data"{% endif %}>
+                {% csrf_token %}
+
+                {% for fieldset in add_existing_form.formatted_fieldset %}
+                    {% if fieldset.title %}<h2>{{ fieldset.title }}</h2>{% endif %}
+                    {% for field in fieldset.fields.values %}
+                        {% bootstrap_horizontal_field field %}
+                    {% endfor %}
+                {% endfor %}
+
+                {% for field in add_existing_form.hidden_fields %}
+                    {{ field }}
+                {% endfor %}
+
+                <div class="row-fluid">
+                    <div class="col-10 col-offset-2 hidden-phone">
+                        <input type="submit" class="btn btn-primary" value="Save Changes" class="default" name="_save">
+                    </div>
+                </div>
+
+                <div class="form-actions hidden-tablet hidden-desktop">
+                    <input type="submit" class="btn btn-primary btn-block btn-large" value="Save Changes" class="default" name="_save">
+                </div>
+            </form>
         </div>
         <div class="tab-pane fade" id="new-profile">
-            <h3>New User</h3>
+            <h3>New RA</h3>
 
             {% if form.non_field_errors %}
                 <div class="alert alert-error">
@@ -56,12 +93,14 @@
 {% endblock %}
 
 {% block extra_js %}
+<script src="{% static "js/dual-listbox.js" %}"></script>
     <script>
         $(function () {
             $('#new-profile-tab a').click(function (e) {
                 e.preventDefault()
                 $(this).tab('show')
-            })
+            });
+            $('#id_phone_numbers').bootstrapDualListbox();
         })
     </script>
 {% endblock %}
