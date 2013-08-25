@@ -20,6 +20,18 @@ class RACallProfile(models.Model):
         else:
             return self.user.username
 
+    def has_change_permissions(self, entity):
+
+        # Active superusers have all permissions.
+        if entity.is_active and entity.is_superuser:
+            return True
+
+        # Owners of the Tree have all permissions.
+        if entity == self.user:
+            return True
+
+        return False
+
 
 class RACallTree(models.Model):
     owners = models.ManyToManyField(User, null=True, blank=False)

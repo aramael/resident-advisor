@@ -83,7 +83,7 @@ def call_tree_view(request, call_tree_id=None):
 
 
 @login_required
-def call_tree_profile_new(request, call_tree_id=None):
+def call_tree_profile_self_new(request, call_tree_id=None):
     """    Display the Landing Page    """
 
     phone_tree = get_object_or_404(RACallTree, pk=call_tree_id)
@@ -111,10 +111,16 @@ def call_tree_profile_new(request, call_tree_id=None):
 
 
 @login_required
-def call_tree_proflie(request):
+def call_tree_profile_self(request, profile_id=None):
     """    Display the Landing Page    """
 
-    profile = get_object_or_404(RACallProfile, user=request.user)
+    if profile_id is not None:
+        profile = get_object_or_404(RACallProfile, pk=profile_id)
+    else:
+        profile = get_object_or_404(RACallProfile, user=request.user)
+
+    if not has_model_permissions(request.user, 'change', profile):
+        return HttpResponseForbidden()
 
     form = RACallProfileForm(instance=profile, data=request.POST or None, files=request.FILES or None)
 
@@ -127,7 +133,7 @@ def call_tree_proflie(request):
         "form": form,
     }
 
-    return render(request, 'call_tree_profile.html', context)
+    return render(request, 'call_tree_profile_self.html', context)
 
 #==============================================================================
 # Users Pages
