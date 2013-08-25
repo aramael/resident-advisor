@@ -42,7 +42,12 @@ def call_tree_home(request):
         'trees': phone_trees,
     }
 
-    return render(request, 'call_tree_home.html', context)
+    if has_model_permissions(request.user, 'change', phone_trees):
+        template = 'call_tree_home_admin.html'
+    else:
+        template = 'call_tree_home.html'
+
+    return render(request, template, context)
 
 @login_required
 def call_tree_new(request):

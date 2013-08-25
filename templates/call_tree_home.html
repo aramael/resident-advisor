@@ -7,34 +7,11 @@
         {% csrf_token %}
         <div class="row-fluid">
             <div class="span12">
-                <h1>Change Call Trees</h1>
+                <h1>View Call Trees</h1>
 
-                <div class="bulk-actions">
-                    <div class="pull-left">
-                        <div>Action:
-                            <select name="action">
-                                <option value="" selected="selected">---------</option>
-                                {% for action in actions %}
-                                    <option value="{{ action.action }}">{{ action.description }}</option>
-                                {% endfor %}
-                            </select>
-                            <input type="submit" class="btn" value="Go" name="_bulkactions">
-                            <span class="action-counter" style="display: inline;"><span class="selected-count">0</span> of {{ trees|length }} selected</span>
-                        </div>
-                    </div>
-                    <div class="pull-right">
-                        <a class="btn btn-primary" href="{% url "call_tree_new" %}">New Call Tree</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row-fluid">
-            <div class="span12">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" id="action-toggle" style="display: inline-block;"></th>
                             <th>Name</th>
                             <th>Call Number</th>
                             <th>Owners</th>
@@ -43,14 +20,13 @@
                     <tbody>
                         {% for tree in trees %}
                             <tr>
-                                <td class="action-checkbox"><input class="action-select" name="_selected_action" type="checkbox" value="{{ tree.pk }}"></td>
                                 <td><a href="{% url "call_tree_view" tree.pk %}">{{ tree.nice_name }}</a></td>
                                 <td>{{ tree.call_number }}</td>
                                 <td>{{ tree.display_owners }}</td>
                             </tr>
                         {% empty %}
                             <tr>
-                                <td colspan="4" style="text-align: center">No call trees found, <a href="{% url "call_tree_new" %}">create a new call tree</a></td>
+                                <td colspan="4" style="text-align: center">No call trees found. Ask your CA to place you in one.</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -59,9 +35,4 @@
         </div>
 
     </form>
-{% endblock %}
-
-{% block extra_js %}
-    <script src="{% static "js/bulk-actions.js" %}"></script>
-    <script>var _max_bulk_item_count={{ trees|length }}; var _current_bulk_item_count=0</script>
 {% endblock %}
