@@ -1,3 +1,4 @@
+import collections
 
 
 def has_model_permissions(entity, perms, instance):
@@ -5,7 +6,10 @@ def has_model_permissions(entity, perms, instance):
     if not isinstance(perms, list):
         perms = [perms, ]
 
-    instances = list(instance)
+    if isinstance(instance, collections.Iterable):
+        instances = instance
+    else:
+        instances = [instance, ]
 
     for perm in perms:
         for instance in instances:

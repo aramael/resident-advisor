@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     url(r'^phonetrees/(?P<call_tree_id>[0-9]+)/$', 'resident_advisor.views.call_tree_view', name='call_tree_view'),
     url(r'^phonetrees/new$', 'resident_advisor.views.call_tree_new', name='call_tree_new'),
     url(r'^phonetrees/(?P<call_tree_id>[0-9]+)/new$', 'resident_advisor.views.call_tree_profile_new', name='call_tree_profile_new'),
-    url(r'^phonetrees/profiles/(?P<call_tree_id>[0-9]+)/$', 'resident_advisor.views.call_tree_profile', name='call_tree_profile'),
+    url(r'^phonetrees/profiles/(?P<profile_id>[0-9]+)/$', 'resident_advisor.views.call_tree_profile', name='call_tree_profile'),
     url(r'^phonetrees/profiles/me/$', 'resident_advisor.views.call_tree_profile', name='call_tree_profile_self'),
 
     # Call Tree Twilio Pages
