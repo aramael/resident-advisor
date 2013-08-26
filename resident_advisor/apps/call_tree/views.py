@@ -45,7 +45,7 @@ def call_receive(request):
 
     for call in calls:
         if call != caller:
-            call_tree_outbound_call(client, tree, request.POST['To'], call.phone_number)
+            call_tree_outbound_call(request, client, tree, request.POST['To'], call.phone_number)
 
     return r
 
@@ -56,7 +56,7 @@ def outgoing_call(request, call_tree_id=None):
 
     r = twiml.Response()
 
-    with r.gather(numDigits='1', action=url_with_get({'to': 'conference_connect', 'call_tree_id': tree.pk})) as g:
+    with r.gather(numDigits='1', action=url_with_get(request, {'to': 'conference_connect', 'call_tree_id': tree.pk})) as g:
         g.say(tree.nice_name + ' Resident Advisor Alert Call. Press any key to connect', loop=20)
 
     r.say('Sorry, we missed you we will try calling again in a few moments.')

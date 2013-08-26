@@ -4,16 +4,16 @@ import phonenumbers
 from django.shortcuts import resolve_url
 
 
-def call_tree_outbound_call(client, tree, from_, to):
+def call_tree_outbound_call(request, client, tree, from_, to):
 
-    outgoing_call_url = url_with_get({'to': to, 'call_tree_id': tree.pk})
+    outgoing_call_url = url_with_get(request, {'to': to, 'call_tree_id': tree.pk})
 
     client.calls.create(to=to, from_=from_, url=outgoing_call_url)
 
     return True
 
 
-def url_with_get(to, **kwargs):
+def url_with_get(request, to, **kwargs):
 
     if kwargs is not None:
 
@@ -33,7 +33,9 @@ def url_with_get(to, **kwargs):
     else:
         to = resolve_url(to)
 
-    return to + query_args
+    url = to + query_args
+
+    return request.build_absolute_uri(url)
 
 
 def format_phone_number(phoneNumber):
