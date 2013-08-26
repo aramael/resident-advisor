@@ -15,7 +15,8 @@ class Migration(SchemaMigration):
             ('state', self.gf('django.db.models.fields.CharField')(max_length=50)),
             ('longitude', self.gf('django.db.models.fields.DecimalField')(max_digits=9, decimal_places=6)),
             ('latitude', self.gf('django.db.models.fields.DecimalField')(max_digits=9, decimal_places=6)),
-            ('timezone', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('timezone', self.gf('django.db.models.fields.IntegerField')()),
+            ('dst', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal(u'zipcodes', ['ZipCode'])
 
@@ -29,10 +30,11 @@ class Migration(SchemaMigration):
         u'zipcodes.zipcode': {
             'Meta': {'object_name': 'ZipCode'},
             'city': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'dst': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'latitude': ('django.db.models.fields.DecimalField', [], {'max_digits': '9', 'decimal_places': '6'}),
             'longitude': ('django.db.models.fields.DecimalField', [], {'max_digits': '9', 'decimal_places': '6'}),
             'state': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'timezone': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'timezone': ('django.db.models.fields.IntegerField', [], {}),
             'zipcode': ('django.db.models.fields.CharField', [], {'max_length': '5', 'primary_key': 'True'})
         }
     }

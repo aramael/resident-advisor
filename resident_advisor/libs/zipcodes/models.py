@@ -8,4 +8,4 @@ class ZipCode(models.Model):
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     timezone = models.IntegerField()
-    timezone = models.BooleanField()
+    dst = models.BooleanField()
