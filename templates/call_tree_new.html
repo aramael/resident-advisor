@@ -43,8 +43,86 @@
         </div>
     </form>
 
+    <!-- Modal -->
+    <div class="modal fade" id="phonenumber-search" tabindex="-1" role="dialog" aria-labelledby="phonenumber-search-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="phonenumber-search-label">Search for Phone Numbers</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-inline" role="form" id="phone-search-form">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <label class="sr-only" for="exampleInputEmail2">Email address</label>
+                                    <div class="input-group">
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown"><span id="phone-search-toggle-icon" class="glyphicon glyphicon-earphone"></span> <span class="caret"></span></button>
+                                            <ul class="dropdown-menu">
+                                                <li><a onclick="change_form_to_phone()"><span class="glyphicon glyphicon-earphone"></span> Number</a></li>
+                                                <li><a onclick="change_form_to_location()"><span class="glyphicon glyphicon-globe"></span> Location</a></li>
+                                            </ul>
+                                        </div><!-- /btn-group -->
+                                        <input type="text" class="form-control input-lg hidden" id="phone-search-location-input" name="location">
+                                        <div class="form-control phone-search-input-container" id="phone-search-phone-input">
+                                            <span class="phone-search-input-container">(</span>
+                                            <input type="text" class="phone-search-input" style="width: 20%;" name="area_code">
+                                            <span class="phone-search-input-container">)</span>
+                                            <input type="text" class="phone-search-input" style="width: 65%;" name="search_term">
+                                        </div>
+                                    </div><!-- /input-group -->
+                                    <p id="phone-search-help" class="help-block">Search by area code, digits and phrases</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary btn-lg" id="phone-search-submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 {% endblock %}
 {% block extra_js %}
     <script src="{% static "js/dual-listbox.js" %}"></script>
-    <script>$('#id_owners').bootstrapDualListbox();$('#id_phone_numbers').bootstrapDualListbox();</script>
+    <script>
+
+        var ps_form = $('#phone-search-form');
+        var ps_icon = $('#phone-search-toggle-icon');
+        var ps_help = $('#phone-search-help');
+        var ps_submit = $('#phone-search-submit');
+        var ps_phone_input = $('#phone-search-phone-input');
+        var ps_location_input = $('#phone-search-location-input');
+
+        function change_form_to_location() {
+            ps_icon.addClass('glyphicon-globe').removeClass('glyphicon-earphone');
+            ps_help.html('Search by city, state or postal code');
+
+            ps_phone_input.addClass('hidden');
+            ps_location_input.removeClass('hidden');
+        }
+
+        function change_form_to_phone() {
+            ps_icon.addClass('glyphicon-earphone').removeClass('glyphicon-globe');
+            ps_help.html('Search by area code, digits and phrases');
+
+            ps_location_input.addClass('hidden');
+            ps_phone_input.removeClass('hidden');
+        }
+
+        $(document).ready(function(){
+            $('#id_owners').bootstrapDualListbox();
+            $('#id_phone_numbers').bootstrapDualListbox();
+
+            ps_submit.click(function (e){
+                e.preventDefault();
+            });
+        });
+
+
+    </script>
 {% endblock %}

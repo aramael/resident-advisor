@@ -1,6 +1,7 @@
 from django import forms
 from resident_advisor.libs.forms import ActionMethodForm, HideOwnerForm, FieldsetsForm
 from .models import RACallProfile, RACallTree
+from .widgets import TwilioPhoneNumberLookup
 
 
 class RACallProfileForm(ActionMethodForm, HideOwnerForm, forms.ModelForm):
@@ -56,6 +57,9 @@ class RACallTreeForm(ActionMethodForm, forms.ModelForm, FieldsetsForm):
     class Meta:
         model = RACallTree
         fields = ['nice_name', 'call_number', 'phone_numbers', 'owners']
+        widgets = {
+            'call_number': TwilioPhoneNumberLookup()
+        }
 
     def location_redirect(self, action, instance):
         if action == '_save':
