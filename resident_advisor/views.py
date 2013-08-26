@@ -31,7 +31,7 @@ def call_tree_home(request):
     else:
         phone_trees = RACallTree.objects.all()
 
-    if phone_trees.count() == 1:
+    if phone_trees.count() == 1 and not has_global_permissions(request.user,RACallTree, 'change', 'call_tree'):
         # The User Can Only View One Phone Tree
         phone_tree = phone_trees[0]
 
