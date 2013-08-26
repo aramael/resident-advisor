@@ -84,7 +84,7 @@ def number_search(request):
 
     json_numbers = []
 
-    for number in numbers:
+    for number in numbers[:9]:
 
         if number.postal_code:
             zipcode = zcdb[number.postal_code]
