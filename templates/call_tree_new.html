@@ -94,6 +94,7 @@
     <script>
 
         var ps_form = $('#phone-search-form');
+        var ps_results = $('#phone-search-results');
         var ps_icon = $('#phone-search-toggle-icon');
         var ps_help = $('#phone-search-help');
         var ps_submit = $('#phone-search-submit');
@@ -126,8 +127,11 @@
                 $.post('{% url "number_search" %}', ps_form.serialize(), function(data) {
                     data = $.parseJSON(data);
 
-                    console.log('Found Cool Data');
-                    console.log(data);
+                    $.each( data['numbers'], function( key, entry ) {
+                        var phone_number = entry['phone_number'];
+                        var formatted_phone_number = entry['friendly_name'];
+                        ps_results.append('<a class="list-group-item"><div class="clearfix"><div class="pull-left"><h4 class="list-group-item-heading">' + formatted_phone_number +'</h4><p class="list-group-item-text">' + phone_number + '</p></div><div class="pull-right"><button class="btn btn-primary btn-lg">Buy</button></div></div></a>');
+                    });
 
                 });
             });
