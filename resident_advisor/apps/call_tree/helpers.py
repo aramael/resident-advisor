@@ -4,9 +4,9 @@ import phonenumbers
 from django.shortcuts import resolve_url
 
 
-def call_tree_outbound_call(client, from_, to):
+def call_tree_outbound_call(client, tree, from_, to):
 
-    outgoing_call_url = url_with_get('')
+    outgoing_call_url = url_with_get({'to': to, 'call_tree_id': tree.pk})
 
     client.calls.create(to=to, from_=from_, url=outgoing_call_url)
 

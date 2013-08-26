@@ -9,6 +9,8 @@ from twilio.rest import TwilioRestClient
 from twilio import twiml
 from json import dumps as json_encode
 from pyzipcode import ZipCodeDatabase
+from django.shortcuts import get_object_or_404
+
 
 @twilio
 def call_recieve(request):
@@ -44,17 +46,19 @@ def call_recieve(request):
 
     for call in calls:
         if call != caller:
-            call_tree_outbound_call(client, request.POST['To'], call.phone_number)
+            call_tree_outbound_call(client, tree, request.POST['To'], call.phone_number)
 
     return r
 
 @twilio
-def outgoing_call(request):
+def outgoing_call(request, call_tree_id=None):
+
+    tree = get_object_or_404(RACallTree, pk=call_tree_id)
 
     r = twiml.Response()
 
-    with r.gather(numDigits='1', action=url_with_get('conference_connect')) as g:
-        g.say('East Campus Alert Call. Press any key to connect', loop=20)
+    with r.gather(numDigits='1', action=url_with_get({'to': 'conference_connect', 'call_tree_id': tree.pk})) as g:
+        g.say(tree.nice_name + ' Resident Advisor Alert Call. Press any key to connect', loop=20)
 
     r.say('Sorry, we missed you we will try calling again in a few moments.')
 
@@ -64,14 +68,16 @@ def outgoing_call(request):
 
 
 @twilio
-def conference_connect(request):
+def conference_connect(request, call_tree_id=None):
+
+    tree = get_object_or_404(RACallTree, pk=call_tree_id)
 
     r = twiml.Response()
 
     r.say('You have been connected.')
 
     with r.dial() as d:
-        d.conference('resident-advisor-call-tree')
+        d.conference(get_conference_name(tree))
 
     return r
 

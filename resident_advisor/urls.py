@@ -23,8 +23,8 @@ urlpatterns = patterns('',
 
     # Call Tree Twilio Pages
     url(r'^twilio/calltree/recieve/$', 'resident_advisor.apps.call_tree.views.call_recieve', name='call_tree_recieve_call'),
-    url(r'^twilio/calltree/send/$', 'resident_advisor.apps.call_tree.views.outgoing_call', name='call_tree_outgoing_call'),
-    url(r'^twilio/calltree/connect/$', 'resident_advisor.apps.call_tree.views.conference_connect', name='call_tree_conference_connect'),
+    url(r'^twilio/calltree/(?P<call_tree_id>[0-9]+)/send/$', 'resident_advisor.apps.call_tree.views.outgoing_call', name='call_tree_outgoing_call'),
+    url(r'^twilio/calltree/(?P<call_tree_id>[0-9]+)/connect/$', 'resident_advisor.apps.call_tree.views.conference_connect', name='call_tree_conference_connect'),
     url(r'^twilio/phonenumbers/search/$', 'resident_advisor.apps.call_tree.views.number_search', name='number_search'),
 
     url(r'^admin/', include(admin.site.urls)),
