@@ -1,3 +1,5 @@
+import requests
+
 from .helpers import call_tree_outbound_call, url_with_get
 from .models import RACallProfile
 from .wrappers import twilio
@@ -74,11 +76,35 @@ def number_search(request):
         'country': 'US',
     }
 
-    if 'area_code' in request.POST and request.POST['area_code']:
-        search_kwargs['area_code'] = request.POST['area_code']
+    if 'location' in request.POST and request.POST['location']:
 
-    if 'search_term' in request.POST and request.POST['search_term']:
-        search_kwargs['contains'] = request.POST['search_term']
+        # Parse Results into More Easily Searchable Things
+
+        request_payload = {
+            'sensor': 'false',
+            'address': request.POST['location'],
+        }
+
+        r = requests.get('http://maps.googleapis.com/maps/api/geocode/json', params=request_payload)
+
+        location_parse = r.json()
+
+        if 'results' in location_parse:
+
+            location_parse = location_parse['results'][0]['address_components']
+
+            for component in location_parse:
+                if 'types' in component:
+                    if 'postal_code' in component['types']:
+                        search_kwargs['postal_code'] = component['short_name']
+                    if 'administrative_area_level_1' in component['types']:
+                        search_kwargs['region'] = component['short_name']
+    else:
+        if 'area_code' in request.POST and request.POST['area_code']:
+            search_kwargs['area_code'] = request.POST['area_code']
+
+        if 'search_term' in request.POST and request.POST['search_term']:
+            search_kwargs['contains'] = request.POST['search_term']
 
     numbers = client.phone_numbers.search(**search_kwargs)
 
