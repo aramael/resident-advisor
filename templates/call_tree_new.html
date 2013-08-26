@@ -111,6 +111,7 @@
             ps_help.html('Search by city, state or postal code');
 
             ps_phone_input.addClass('hidden');
+            ps_phone_input.find('input').val('');
             ps_location_input.removeClass('hidden');
         }
 
@@ -119,6 +120,7 @@
             ps_help.html('Search by area code, digits and phrases');
 
             ps_location_input.addClass('hidden');
+            ps_location_input.val('');
             ps_phone_input.removeClass('hidden');
         }
 
