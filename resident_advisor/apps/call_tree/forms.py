@@ -75,7 +75,10 @@ class RACallTreeForm(ActionMethodForm, forms.ModelForm, FieldsetsForm):
             # Purchase Phone Number
             client = TwilioRestClient(settings.TWILIO_ACCOUNT, settings.TWILIO_TOKEN)
             number = client.phone_numbers.purchase(phone_number=self.cleaned_data['call_number'])
-            number.update(voice_url=url_with_get(request, 'call_tree_receive_call'))
+            try:
+                number.update(voice_url=url_with_get(request, 'call_tree_receive_call'))
+            except AttributeError:
+                pass
 
         location_redirect = self.location_redirect(action, instance)
 
