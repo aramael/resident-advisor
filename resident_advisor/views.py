@@ -55,7 +55,14 @@ def call_tree_new(request):
     if not has_global_permissions(request.user, RACallTree, 'add', 'call_tree'):
         return HttpResponseForbidden('403 Forbidden')
 
-    form = RACallTreeForm(initial={'owners': [request.user.pk, ], 'phone_numbers': [request.user.racallprofile.pk, ]},
+    initial = {'owners': [request.user.pk, ]}
+
+    try:
+        initial['phone_numbers'] = [request.user.racallprofile.pk, ]
+    except RACallProfile.DoesNotExist:
+        pass
+
+    form = RACallTreeForm(initial=initial,
                           data=request.POST or None,
                           files=request.FILES or None)
 
