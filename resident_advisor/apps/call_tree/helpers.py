@@ -4,9 +4,9 @@ import phonenumbers
 from django.shortcuts import resolve_url
 
 
-def call_tree_outbound_call(client, from_, to):
+def call_tree_outbound_call(client, tree, from_, to):
 
-    outgoing_call_url = url_with_get('')
+    outgoing_call_url = url_with_get({'to': to, 'call_tree_id': tree.pk})
 
     client.calls.create(to=to, from_=from_, url=outgoing_call_url)
 
@@ -50,3 +50,13 @@ def format_phone_number(phoneNumber):
 
     phone_representation = phonenumbers.parse(phoneNumber, parse_type)
     return phonenumbers.format_number(phone_representation, phonenumbers.PhoneNumberFormat.E164)
+
+
+def get_conference_name(tree, prefix='resident-advisor-'):
+
+    # Convert Tree to Nice Name
+    name = tree.nice_name
+    name = name.lower()
+    name = name.replace(' ', '-')
+
+    return prefix + name + '-' + str(tree.pk)

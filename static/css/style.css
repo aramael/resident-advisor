@@ -1,11 +1,5 @@
 
-@media (min-width: 1200px) {
-    body {
-        padding-top: 60px;
-        padding-bottom: 40px;
-    }
-}
-
+body { padding-top: 70px; }
 
 .dropdown-menu form input {
     margin-bottom: 15px;
@@ -76,4 +70,13 @@
     vertical-align: middle;
     background-color: #033c73;
     border-radius: .25em;
+}
+
+.phone-search-input-container {
+    font-size: 18px;
+}
+
+.phone-search-input {
+    outline: 0;
+    border: 0;
 }

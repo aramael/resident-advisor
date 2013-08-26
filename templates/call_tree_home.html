@@ -1,27 +1,38 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 
-    <h1>Call Tree</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-12">
+                <h1>View Call Trees</h1>
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Phone Number</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for profile in profiles %}
-                <tr>
-                    <td>{{ profile.user.first_name }} {{ profile.user.last_name }}</td>
-                    <td>{{ profile.phone_number }}</td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="2" style="text-align: center">No one was found in this call tree.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Call Number</th>
+                            <th>Owners</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tree in trees %}
+                            <tr>
+                                <td><a href="{% url "call_tree_view" tree.pk %}">{{ tree.nice_name }}</a></td>
+                                <td>{{ tree.call_number }}</td>
+                                <td>{{ tree.display_owners }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4" style="text-align: center">No call trees found. Ask your CA to place you in one.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </form>
 {% endblock %}

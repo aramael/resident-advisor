@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    <h1>Edit Your Call Tree Info</h1>
+    <h1>New User</h1>
 
     {% if form.non_field_errors %}
         <div class="alert alert-error">
@@ -17,7 +17,7 @@
         {% csrf_token %}
 
         {% for field in form.visible_fields %}
-            {% bootstrap_field field %}
+            {% bootstrap_horizontal_field field %}
         {% endfor %}
 
         {% for field in form.hidden_fields %}
@@ -26,12 +26,16 @@
 
         <div class="row">
             <div class="col-md-10 col-md-offset-2 hidden-xs">
-                <input type="submit" class="btn btn-primary" value="Update Information" class="default" name="_save">
+                <input type="submit" class="btn btn-primary" value="Add User" class="default" name="_save">
+                <input type="submit" class="btn btn-info" value="Add User & Add Another" name="_addanother">
+                <input type="submit" class="btn" value="Add User & Continue Editing" name="_continue">
             </div>
         </div>
 
         <div class="form-actions hidden-md hidden-lg hidden-sm ">
-            <input type="submit" class="btn btn-primary btn-block btn-lg" value="Update Information" class="default" name="_save">
+            <input type="submit" class="btn btn-primary btn-block btn-lg" value="Add User" class="default" name="_save">
+            <input type="submit" class="btn btn-info btn-block btn-lg" value="Add User & Add Another" name="_addanother">
+            <input type="submit" class="btn btn-block btn-lg" value="Add User & Continue Editing" name="_continue">
         </div>
     </form>
 

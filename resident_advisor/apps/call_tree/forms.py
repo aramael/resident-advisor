@@ -1,10 +1,12 @@
 from django import forms
-from resident_advisor.libs.forms import ActionMethodForm, HideOwnerForm
-from .models import RACallProfile
+from resident_advisor.libs.forms import ActionMethodForm, HideOwnerForm, FieldsetsForm
+from .models import RACallProfile, RACallTree
+from .widgets import TwilioPhoneNumberLookup
+from twilio.rest import TwilioRestClient
+from django.conf import settings
 
 
 class RACallProfileForm(ActionMethodForm, HideOwnerForm, forms.ModelForm):
-
     first_name = forms.CharField()
     last_name = forms.CharField()
 
@@ -25,11 +27,9 @@ class RACallProfileForm(ActionMethodForm, HideOwnerForm, forms.ModelForm):
 
     def location_redirect(self, action, instance):
         if action == '_save':
-            return {"to": 'call_tree_proflie'}
+            return {"to": 'call_tree_profile_self'}
 
     def save(self, *args, **kwargs):
-
-        print "AWESOME SAUCES"
 
         if self.instance is not None:
 
@@ -38,3 +38,59 @@ class RACallProfileForm(ActionMethodForm, HideOwnerForm, forms.ModelForm):
             self.instance.user.save(*args, **kwargs)
 
         return super(RACallProfileForm, self).save(*args, **kwargs)
+
+
+class RACallTreeForm(ActionMethodForm, forms.ModelForm, FieldsetsForm):
+
+    fieldsets = (
+        (None, {
+            'fields': ('nice_name',)
+        }),
+        ("Phones", {
+            'fields': ('call_number', 'phone_numbers',)
+        }),
+        ("Permissions", {
+            'fields': ('owners',)
+        }),
+    )
+
+    POSSIBLE_ACTIONS = {'_save'}
+
+    class Meta:
+        model = RACallTree
+        fields = ['nice_name', 'call_number', 'phone_numbers', 'owners']
+        widgets = {
+            'call_number': TwilioPhoneNumberLookup()
+        }
+
+    def clean(self):
+        cleaned_data = super(RACallTreeForm, self).clean()
+
+        # Purchase Phone Number
+        client = TwilioRestClient(settings.TWILIO_ACCOUNT, settings.TWILIO_TOKEN)
+        number = client.phone_numbers.purchase(phone_number=cleaned_data['call_number'])
+
+        return cleaned_data
+
+    def location_redirect(self, action, instance):
+        if action == '_save':
+            return {"to": 'call_tree_view', 'call_tree_id': instance.pk}
+
+
+class RACallTreeEditForm(ActionMethodForm, FieldsetsForm, forms.ModelForm):
+
+    fieldsets = (
+        (None, {
+            'fields': ('phone_numbers',)
+        }),
+    )
+
+    POSSIBLE_ACTIONS = {'_save'}
+
+    class Meta:
+        model = RACallTree
+        fields = ['phone_numbers',]
+
+    def location_redirect(self, action, instance):
+        if action == '_save':
+            return {"to": 'call_tree_view', 'call_tree_id': instance.pk}

@@ -5,16 +5,27 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', 'resident_advisor.views.call_tree_proflie', name='home'),
+    url(r'^$', 'resident_advisor.views.home', name='home'),
+
+    # User Pages
+    url(r'^users/$', 'resident_advisor.views.users_home', name='users_home'),
+    url(r'^users/new$', 'resident_advisor.views.users_new', name='users_new'),
+    url(r'^users/(?P<user_id>[0-9]+)/$', 'resident_advisor.views.users_edit', name='users_edit'),
+    url(r'^users/me/$', 'resident_advisor.views.users_edit', {'self_edit': True}, name='account_edit'),
 
     # Call Tree Pages
-    url(r'^calltree/$', 'resident_advisor.views.call_tree_home', name='call_tree_home'),
-    url(r'^calltree/profile/me/$', 'resident_advisor.views.call_tree_proflie', name='call_tree_proflie'),
+    url(r'^phonetrees/$', 'resident_advisor.views.call_tree_home', name='call_tree_home'),
+    url(r'^phonetrees/(?P<call_tree_id>[0-9]+)/$', 'resident_advisor.views.call_tree_view', name='call_tree_view'),
+    url(r'^phonetrees/new$', 'resident_advisor.views.call_tree_new', name='call_tree_new'),
+    url(r'^phonetrees/(?P<call_tree_id>[0-9]+)/new$', 'resident_advisor.views.call_tree_profile_new', name='call_tree_profile_new'),
+    url(r'^phonetrees/profiles/(?P<profile_id>[0-9]+)/$', 'resident_advisor.views.call_tree_profile', name='call_tree_profile'),
+    url(r'^phonetrees/profiles/me/$', 'resident_advisor.views.call_tree_profile', name='call_tree_profile_self'),
 
     # Call Tree Twilio Pages
-    url(r'^twilio/calltree/recieve/$', 'resident_advisor.apps.call_tree.views.call_recieve', name='call_tree_recieve_call'),
-    url(r'^twilio/calltree/send/$', 'resident_advisor.apps.call_tree.views.outgoing_call', name='call_tree_outgoing_call'),
-    url(r'^twilio/calltree/connect/$', 'resident_advisor.apps.call_tree.views.conference_connect', name='call_tree_conference_connect'),
+    url(r'^twilio/calltree/recieve/$', 'resident_advisor.apps.call_tree.views.call_receive', name='call_tree_receive_call'),
+    url(r'^twilio/calltree/(?P<call_tree_id>[0-9]+)/send/$', 'resident_advisor.apps.call_tree.views.outgoing_call', name='call_tree_outgoing_call'),
+    url(r'^twilio/calltree/(?P<call_tree_id>[0-9]+)/connect/$', 'resident_advisor.apps.call_tree.views.conference_connect', name='call_tree_conference_connect'),
+    url(r'^twilio/phonenumbers/search/$', 'resident_advisor.apps.call_tree.views.number_search', name='number_search'),
 
     url(r'^admin/', include(admin.site.urls)),
 )
