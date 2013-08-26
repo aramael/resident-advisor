@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from twilio.rest import TwilioRestClient
 from twilio import twiml
 from json import dumps as json_encode
-
+from pyzipcode import ZipCodeDatabase
 
 @twilio
 def call_recieve(request):
@@ -68,6 +68,7 @@ def conference_connect(request):
 def number_search(request):
 
     client = TwilioRestClient(settings.TWILIO_ACCOUNT, settings.TWILIO_TOKEN)
+    zcdb = ZipCodeDatabase()
 
     search_kwargs = {
         'country': 'US',
@@ -84,10 +85,14 @@ def number_search(request):
     json_numbers = []
 
     for number in numbers:
+        zipcode = zcdb[number.postal_code]
+
         json_numbers.append({
             'friendly_name': number.friendly_name,
             'phone_number': number.phone_number,
             'postal_code': number.postal_code,
+            'city': zipcode.city,
+            'state': zipcode.state,
         })
 
     data = {
