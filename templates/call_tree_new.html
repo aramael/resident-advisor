@@ -144,6 +144,10 @@
                 $.post('{% url "number_search" %}', ps_form.serialize(), function(data) {
                     data = $.parseJSON(data);
 
+                    if (data['empty_set']){
+                        ps_results.append('<div class="list-group-item"><strong>No results were found</strong>. Please try modifying your search query.</div>');
+                    }
+
                     $.each( data['numbers'], function( key, entry ) {
                         var phone_number = entry['phone_number'];
                         var formatted_phone_number = entry['friendly_name'];
