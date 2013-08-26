@@ -24,15 +24,33 @@ def production():
 # Default Environment
 development()
 
+# === Deployment ===
+
+
+def start_hotfix(name):
+    local('git checkout -b hotfix-{name}'.format(name=name))
+
+
+def close_hotfix(name):
+    local('git checkout master')
+    local('git merge --no-ff hotfix-{name}'.format(name=name))
+    local('git checkout develop')
+    local('git merge --no-ff hotfix-{name}'.format(name=name))
+    local('git branch -d hotfix-{name}'.format(name=name))
 
 # === Deployment ===
 def deploy():
     local('git push origin --all')
     local('git push {remote}'.format(**env))
     migrate()
-    local('heroku run python manage.py collectstatic --settings={settings}'.format(**env))
+    collectstatic()
     local('heroku open --app {heroku_app}'.format(**env))
 
+def collectstatic():
+    if raw_input('\nDo you really want to COLLECT STATIC of {heroku_app}? YES or [NO]: '.format(**env)) == 'YES':
+        local('heroku run python manage.py collectstatic --settings={settings}  --app {heroku_app}'.format(**env))
+    else:
+        print '\nCOLLECT STATIC aborted'
 
 def open():
     if env.env == 'development':
@@ -49,7 +67,7 @@ def resetdb():
     else:
 
         if raw_input('\nDo you really want to RESET DATABASE of {heroku_app}? YES or [NO]: '.format(**env)) == 'YES':
-            local('heroku run python manage.py syncdb --noinput --settings={settings} --app {heroku_app}'.format(
+            local('heroku run python manage.py syncdb --settings={settings} --app {heroku_app}'.format(
                 **env))
             local('heroku run python manage.py migrate --settings={settings} --app {heroku_app}'.format(**env))
         else:
