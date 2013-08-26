@@ -13,7 +13,7 @@ from django.shortcuts import get_object_or_404
 
 
 @twilio
-def call_recieve(request):
+def call_receive(request):
 
     r = twiml.Response()
 
