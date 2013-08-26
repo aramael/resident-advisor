@@ -49,7 +49,7 @@ def resetdb():
     else:
 
         if raw_input('\nDo you really want to RESET DATABASE of {heroku_app}? YES or [NO]: '.format(**env)) == 'YES':
-            local('heroku run python manage.py syncdb --noinput --settings={settings} --app {heroku_app}'.format(
+            local('heroku run python manage.py syncdb --settings={settings} --app {heroku_app}'.format(
                 **env))
             local('heroku run python manage.py migrate --settings={settings} --app {heroku_app}'.format(**env))
         else:
