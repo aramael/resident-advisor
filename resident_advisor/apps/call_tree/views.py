@@ -67,8 +67,32 @@ def conference_connect(request):
 
 def number_search(request):
 
+    client = TwilioRestClient(settings.TWILIO_ACCOUNT, settings.TWILIO_TOKEN)
+
+    search_kwargs = {
+        'country': 'US',
+    }
+
+    if 'area_code' in request.POST and request.POST['area_code']:
+        search_kwargs['area_code'] = request.POST['area_code']
+
+    if 'search_term' in request.POST and request.POST['search_term']:
+        search_kwargs['contains'] = request.POST['search_term']
+
+    numbers = client.phone_numbers.search(**search_kwargs)
+
+    json_numbers = []
+
+    for number in numbers:
+        json_numbers.append({
+            'friendly_name': number.friendly_name,
+            'phone_number': number.phone_number,
+            'postal_code': number.postal_code,
+        })
+
     data = {
         'success': True,
+        'numbers': json_numbers,
     }
 
     return HttpResponse(json_encode(data))
