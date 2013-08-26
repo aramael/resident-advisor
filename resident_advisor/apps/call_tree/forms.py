@@ -2,6 +2,8 @@ from django import forms
 from resident_advisor.libs.forms import ActionMethodForm, HideOwnerForm, FieldsetsForm
 from .models import RACallProfile, RACallTree
 from .widgets import TwilioPhoneNumberLookup
+from twilio.rest import TwilioRestClient
+from django.conf import settings
 
 
 class RACallProfileForm(ActionMethodForm, HideOwnerForm, forms.ModelForm):
@@ -60,6 +62,15 @@ class RACallTreeForm(ActionMethodForm, forms.ModelForm, FieldsetsForm):
         widgets = {
             'call_number': TwilioPhoneNumberLookup()
         }
+
+    def clean(self):
+        cleaned_data = super(RACallTreeForm, self).clean()
+
+        # Purchase Phone Number
+        client = TwilioRestClient(settings.TWILIO_ACCOUNT, settings.TWILIO_TOKEN)
+        number = client.phone_numbers.purchase(phone_number=cleaned_data['call_number'])
+
+        return cleaned_data
 
     def location_redirect(self, action, instance):
         if action == '_save':
