@@ -29,6 +29,8 @@ development()
 def deploy():
     local('git push origin --all')
     local('git push {remote}'.format(**env))
+    migrate()
+    local('heroku run python manage.py collectstatic --settings={settings}'.format(**env))
     local('heroku open --app {heroku_app}'.format(**env))
 
 

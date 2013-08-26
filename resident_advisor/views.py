@@ -42,7 +42,7 @@ def call_tree_home(request):
         'trees': phone_trees,
     }
 
-    if has_model_permissions(request.user, 'change', phone_trees):
+    if has_model_permissions(request.user, 'change', phone_trees) or has_global_permissions(request.user,RACallTree, 'change', 'call_tree'):
         template = 'call_tree_home_admin.html'
     else:
         template = 'call_tree_home.html'
