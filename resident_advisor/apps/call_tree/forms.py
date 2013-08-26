@@ -63,14 +63,22 @@ class RACallTreeForm(ActionMethodForm, forms.ModelForm, FieldsetsForm):
             'call_number': TwilioPhoneNumberLookup()
         }
 
-    def clean(self):
-        cleaned_data = super(RACallTreeForm, self).clean()
+    def save(self, commit=True):
 
-        # Purchase Phone Number
-        client = TwilioRestClient(settings.TWILIO_ACCOUNT, settings.TWILIO_TOKEN)
-        number = client.phone_numbers.purchase(phone_number=cleaned_data['call_number'])
+        action = self.cleaned_data['action']
 
-        return cleaned_data
+        del self.cleaned_data['action']
+
+        instance = super(ActionMethodForm, self).save(commit)
+
+        if commit:
+            # Purchase Phone Number
+            client = TwilioRestClient(settings.TWILIO_ACCOUNT, settings.TWILIO_TOKEN)
+            number = client.phone_numbers.purchase(phone_number=self.cleaned_data['call_number'])
+
+        location_redirect = self.location_redirect(action, instance)
+
+        return location_redirect
 
     def location_redirect(self, action, instance):
         if action == '_save':
