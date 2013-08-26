@@ -21,7 +21,7 @@ class TwilioPhoneNumberLookup(widgets.Widget):
             final_attrs['value'] = force_text(self._format_value(value))
         return format_html("""
         <div class="input-group">
-      <input type="text" class="form-control" disabled  {0}>
+      <input type="text" class="form-control" readonly  {0}>
       <span class="input-group-btn">
         <button class="btn btn-primary" data-toggle="modal" href="#phonenumber-search" type="button">Search for Available Numbers</button>
       </span>
