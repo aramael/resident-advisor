@@ -71,3 +71,12 @@ body { padding-top: 70px; }
     background-color: #033c73;
     border-radius: .25em;
 }
+
+.phone-search-input-container {
+    font-size: 18px;
+}
+
+.phone-search-input {
+    outline: 0;
+    border: 0;
+}
