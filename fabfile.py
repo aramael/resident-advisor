@@ -30,9 +30,14 @@ def deploy():
     local('git push origin --all')
     local('git push {remote}'.format(**env))
     migrate()
-    local('heroku run python manage.py collectstatic --settings={settings}'.format(**env))
+    collectstatic()
     local('heroku open --app {heroku_app}'.format(**env))
 
+def collectstatic():
+    if raw_input('\nDo you really want to COLLECT STATIC of {heroku_app}? YES or [NO]: '.format(**env)) == 'YES':
+        local('heroku run python manage.py collectstatic --settings={settings}  --app {heroku_app}'.format(**env))
+    else:
+        print '\nCOLLECT STATIC aborted'
 
 def open():
     if env.env == 'development':
