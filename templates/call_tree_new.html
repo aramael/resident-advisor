@@ -89,6 +89,8 @@
 {% endblock %}
 {% block extra_js %}
     <script src="{% static "js/dual-listbox.js" %}"></script>
+    <script src="{% static "js/jquery.cookie.js" %}"></script>
+    <script src="{% static "js/csrf.js" %}"></script>
     <script>
 
         var ps_form = $('#phone-search-form');
@@ -120,6 +122,14 @@
 
             ps_submit.click(function (e){
                 e.preventDefault();
+
+                $.post('{% url "number_search" %}', ps_form.serialize(), function(data) {
+                    data = $.parseJSON(data);
+
+                    console.log('Found Cool Data');
+                    console.log(data);
+
+                });
             });
         });
 

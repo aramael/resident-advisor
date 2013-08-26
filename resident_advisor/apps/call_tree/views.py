@@ -2,8 +2,10 @@ from .helpers import call_tree_outbound_call, url_with_get
 from .models import RACallProfile
 from .wrappers import twilio
 from django.conf import settings
+from django.http import HttpResponse
 from twilio.rest import TwilioRestClient
 from twilio import twiml
+from json import dumps as json_encode
 
 
 @twilio
@@ -61,3 +63,12 @@ def conference_connect(request):
         d.conference('resident-advisor-call-tree')
 
     return r
+
+
+def number_search(request):
+
+    data = {
+        'success': True,
+    }
+
+    return HttpResponse(json_encode(data))
