@@ -102,6 +102,9 @@
         var ps_submit = $('#phone-search-submit');
         var ps_phone_input = $('#phone-search-phone-input');
         var ps_location_input = $('#phone-search-location-input');
+        var ps_input = $('#id_call_number');
+        var ps_modal = $('#phonenumber-search');
+        var ps_buy_btn = $('.ps-buy-btn');
 
         function change_form_to_location() {
             ps_icon.addClass('glyphicon-globe').removeClass('glyphicon-earphone');
@@ -117,6 +120,15 @@
 
             ps_location_input.addClass('hidden');
             ps_phone_input.removeClass('hidden');
+        }
+
+        function select_phone_number(phone_number){
+
+            // Insert Phone Number in Input
+            ps_input.val(phone_number);
+
+            // Close Modal
+            ps_modal.modal('hide');
         }
 
         $(document).ready(function(){
@@ -137,7 +149,7 @@
                         var formatted_phone_number = entry['friendly_name'];
                         var locale = entry['location'];
 
-                        ps_results.append('<a class="list-group-item"><div class="clearfix"><div class="pull-left"><h4 class="list-group-item-heading">' + formatted_phone_number +'</h4><p class="list-group-item-text">' + phone_number + ' | '+ locale + '</p></div><div class="pull-right"><button class="btn btn-primary btn-lg">Buy</button></div></div></a>');
+                        ps_results.append('<div class="list-group-item"><div class="clearfix"><div class="pull-left"><h4 class="list-group-item-heading">' + formatted_phone_number +'</h4><p class="list-group-item-text">' + phone_number + ' | '+ locale + '</p></div><div class="pull-right"><a onclick="select_phone_number(\'' + phone_number + '\')" class="btn btn-primary btn-lg ps-buy-btn">Buy</a></div></div></div>');
                     });
 
                 });
