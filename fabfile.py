@@ -28,15 +28,15 @@ development()
 
 
 def start_hotfix(name):
-    local('git checkout -b {name}'.format(name=name))
+    local('git checkout -b hotfix-{name}'.format(name=name))
 
 
 def close_hotfix(name):
     local('git checkout master')
-    local('git merge --no-ff {name}'.format(name=name))
+    local('git merge --no-ff hotfix-{name}'.format(name=name))
     local('git checkout develop')
-    local('git merge --no-ff {name}'.format(name=name))
-    local('git branch -d {name}'.format(name=name))
+    local('git merge --no-ff hotfix-{name}'.format(name=name))
+    local('git branch -d hotfix-{name}'.format(name=name))
 
 # === Deployment ===
 def deploy():
