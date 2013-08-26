@@ -15,13 +15,13 @@ class TwilioPhoneNumberLookup(widgets.Widget):
     def render(self, name, value, attrs=None):
         if value is None:
             value = ''
-        final_attrs = self.build_attrs(attrs, name=name)
+        final_attrs = self.build_attrs(attrs, name=name, readonly="readonly", type="text")
         if value != '':
             # Only add the 'value' attribute if a value is non-empty.
             final_attrs['value'] = force_text(self._format_value(value))
         return format_html("""
         <div class="input-group">
-      <input type="text" class="form-control" readonly  {0}>
+      <input class="form-control" {0}>
       <span class="input-group-btn">
         <button class="btn btn-primary" data-toggle="modal" href="#phonenumber-search" type="button">Search for Available Numbers</button>
       </span>
