@@ -1,7 +1,7 @@
 import requests
 
-from .helpers import call_tree_outbound_call, url_with_get
-from .models import RACallProfile
+from .helpers import call_tree_outbound_call, url_with_get, get_conference_name
+from .models import RACallProfile, RACallTree
 from .wrappers import twilio
 from django.conf import settings
 from django.http import HttpResponse
@@ -15,27 +15,36 @@ def call_recieve(request):
 
     r = twiml.Response()
 
-    caller_number = request.POST.get('From', None)
+    from_ = request.POST.get('From', None)
+    to = request.POST.get('To', None)
 
     try:
-        caller = RACallProfile.objects.get(formatted_phone_number=caller_number)
+        caller = RACallProfile.objects.get(formatted_phone_number=from_)
     except RACallProfile.DoesNotExist:
+        r.reject()
+        return r
+
+    # Find the Correct Call Tree
+    try:
+        tree = RACallTree.objects.get(call_number=to)
+    except RACallTree.DoesNotExist:
         r.reject()
         return r
 
     # Connect Caller to the Conference Call
     r.say('We are now calling all of the resident advisors in the call tree. Please wait as they are connected.')
     with r.dial() as d:
-        d.conference('resident-advisor-call-tree')
+        d.conference(get_conference_name(tree))
 
     # Dial Everyone Else to Conference Call
 
     client = TwilioRestClient(settings.TWILIO_ACCOUNT, settings.TWILIO_TOKEN)
 
-    calls = RACallProfile.objects.all().exclude(formatted_phone_number=caller_number)
+    calls = tree.phone_numbers.all()
 
     for call in calls:
-        call_tree_outbound_call(client, request.POST['To'], call.phone_number)
+        if call != caller:
+            call_tree_outbound_call(client, request.POST['To'], call.phone_number)
 
     return r
 

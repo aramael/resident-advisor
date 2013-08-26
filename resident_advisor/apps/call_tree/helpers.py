@@ -50,3 +50,13 @@ def format_phone_number(phoneNumber):
 
     phone_representation = phonenumbers.parse(phoneNumber, parse_type)
     return phonenumbers.format_number(phone_representation, phonenumbers.PhoneNumberFormat.E164)
+
+
+def get_conference_name(tree, prefix='resident-advisor-'):
+
+    # Convert Tree to Nice Name
+    name = tree.nice_name
+    name = name.lower()
+    name = name.replace(' ', '-')
+
+    return prefix + name + '-' + str(tree.pk)
