@@ -59,6 +59,7 @@ INSTALLED_APPS = (
     'widget_tweaks',
     'resident_advisor.libs.forms',
     'resident_advisor.apps.call_tree',
+    'resident_advisor.libs.zipcodes',
 )
 
 #==============================================================================
