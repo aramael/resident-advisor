@@ -67,7 +67,7 @@ def call_tree_new(request):
                           files=request.FILES or None)
 
     if form.is_valid():
-        location_redirect = form.save()
+        location_redirect = form.save(request)
         return redirect(**location_redirect)
 
     context = {

@@ -4,7 +4,7 @@ from .models import RACallProfile, RACallTree
 from .widgets import TwilioPhoneNumberLookup
 from twilio.rest import TwilioRestClient
 from django.conf import settings
-
+from .helpers import url_with_get
 
 class RACallProfileForm(ActionMethodForm, HideOwnerForm, forms.ModelForm):
     first_name = forms.CharField()
@@ -63,7 +63,7 @@ class RACallTreeForm(ActionMethodForm, forms.ModelForm, FieldsetsForm):
             'call_number': TwilioPhoneNumberLookup()
         }
 
-    def save(self, commit=True):
+    def save(self, request, commit=True):
 
         action = self.cleaned_data['action']
 
@@ -75,6 +75,7 @@ class RACallTreeForm(ActionMethodForm, forms.ModelForm, FieldsetsForm):
             # Purchase Phone Number
             client = TwilioRestClient(settings.TWILIO_ACCOUNT, settings.TWILIO_TOKEN)
             number = client.phone_numbers.purchase(phone_number=self.cleaned_data['call_number'])
+            number.update(voice_url=url_with_get(request, 'call_tree_receive_call'))
 
         location_redirect = self.location_redirect(action, instance)
 
