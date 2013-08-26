@@ -135,6 +135,8 @@ def number_search(request):
 
     data = {
         'success': True,
+        'results': len(numbers),
+        'empty_set': len(numbers) == 0,
         'numbers': json_numbers,
     }
 
