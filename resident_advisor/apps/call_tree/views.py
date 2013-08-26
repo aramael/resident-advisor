@@ -8,9 +8,8 @@ from django.http import HttpResponse
 from twilio.rest import TwilioRestClient
 from twilio import twiml
 from json import dumps as json_encode
-from pyzipcode import ZipCodeDatabase
 from django.shortcuts import get_object_or_404
-
+from resident_advisor.libs.zipcodes.models import ZipCode
 
 @twilio
 def call_receive(request):
@@ -85,7 +84,6 @@ def conference_connect(request, call_tree_id=None):
 def number_search(request):
 
     client = TwilioRestClient(settings.TWILIO_ACCOUNT, settings.TWILIO_TOKEN)
-    zcdb = ZipCodeDatabase()
 
     search_kwargs = {
         'country': 'US',
@@ -128,7 +126,7 @@ def number_search(request):
     for number in numbers[:9]:
 
         if number.postal_code:
-            zipcode = zcdb[number.postal_code]
+            zipcode = ZipCode.objects.get(zipcode=number.postal_code)
 
             city = zipcode.city
             state = zipcode.state
