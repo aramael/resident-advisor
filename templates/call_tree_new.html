@@ -124,13 +124,18 @@
             ps_submit.click(function (e){
                 e.preventDefault();
 
+                // Reset Results
+                ps_results.html('');
+
                 $.post('{% url "number_search" %}', ps_form.serialize(), function(data) {
                     data = $.parseJSON(data);
 
                     $.each( data['numbers'], function( key, entry ) {
                         var phone_number = entry['phone_number'];
                         var formatted_phone_number = entry['friendly_name'];
-                        ps_results.append('<a class="list-group-item"><div class="clearfix"><div class="pull-left"><h4 class="list-group-item-heading">' + formatted_phone_number +'</h4><p class="list-group-item-text">' + phone_number + '</p></div><div class="pull-right"><button class="btn btn-primary btn-lg">Buy</button></div></div></a>');
+                        var locale = entry['location'];
+
+                        ps_results.append('<a class="list-group-item"><div class="clearfix"><div class="pull-left"><h4 class="list-group-item-heading">' + formatted_phone_number +'</h4><p class="list-group-item-text">' + phone_number + ' | '+ locale + '</p></div><div class="pull-right"><button class="btn btn-primary btn-lg">Buy</button></div></div></a>');
                     });
 
                 });

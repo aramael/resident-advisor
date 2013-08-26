@@ -85,14 +85,26 @@ def number_search(request):
     json_numbers = []
 
     for number in numbers:
-        zipcode = zcdb[number.postal_code]
+
+        if number.postal_code:
+            zipcode = zcdb[number.postal_code]
+
+            city = zipcode.city
+            state = zipcode.state
+            locale = city + ', ' + state
+
+        else:
+            city = None,
+            state = number.region
+            locale = state
 
         json_numbers.append({
             'friendly_name': number.friendly_name,
             'phone_number': number.phone_number,
             'postal_code': number.postal_code,
-            'city': zipcode.city,
-            'state': zipcode.state,
+            'city': city,
+            'state': state,
+            'location': locale,
         })
 
     data = {
